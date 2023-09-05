@@ -55,7 +55,7 @@ class SeedPage extends HomePage {
     await this.page.fill(inputName, walletName);
     await this.page.fill(inputPassword, password);
     await this.page.fill(inputconfirmPassword, password);
-    await this.page.fill(inputMnemonicSeed, "strong script giraffe equal wash biology snake ceiling door bulk dignity eyebrow seven high dog pony sweet potato way annual hard mesh juice economy");
+    await this.page.fill(inputMnemonicSeed, seed);
     await this.page.click(submitButton),
       await this.page.waitForURL('**/recover#3');
 

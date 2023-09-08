@@ -3,19 +3,19 @@
 
 
 "@playwright/test@^1.37.1":
-  "integrity" "sha512-bq9zTli3vWJo8S3LwB91U0qDNQDpEXnw7knhxLM0nwDvexQAwx9tO8iKDZSqqneVq+URd/WIoz+BALMqUTgdSg=="
-  "resolved" "https://registry.npmjs.org/@playwright/test/-/test-1.37.1.tgz"
-  "version" "1.37.1"
+  version "1.37.1"
+  resolved "https://registry.npmjs.org/@playwright/test/-/test-1.37.1.tgz"
+  integrity sha512-bq9zTli3vWJo8S3LwB91U0qDNQDpEXnw7knhxLM0nwDvexQAwx9tO8iKDZSqqneVq+URd/WIoz+BALMqUTgdSg==
   dependencies:
     "@types/node" "*"
-    "playwright-core" "1.37.1"
+    playwright-core "1.37.1"
   optionalDependencies:
-    "fsevents" "2.3.2"
+    fsevents "2.3.2"
 
 "@types/node@*":
-  "integrity" "sha512-PcGNd//40kHAS3sTlzKB9C9XL4K0sTup8nbG5lC14kzEteTNuAFh9u5nA0o5TWnSG2r/JNPRXFVcHJIIeRlmqQ=="
-  "resolved" "https://registry.npmjs.org/@types/node/-/node-20.5.9.tgz"
-  "version" "20.5.9"
+  version "20.5.9"
+  resolved "https://registry.npmjs.org/@types/node/-/node-20.5.9.tgz"
+  integrity sha512-PcGNd//40kHAS3sTlzKB9C9XL4K0sTup8nbG5lC14kzEteTNuAFh9u5nA0o5TWnSG2r/JNPRXFVcHJIIeRlmqQ==
 
 "dotenv@^16.3.1":
   "integrity" "sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ=="

@@ -1,3 +1,7 @@
+
+import dotenv from 'dotenv';
+dotenv.config();
+
 const HomePage = require('./homePage');
 
 const inputName = '[name="name"]';
@@ -12,7 +16,6 @@ const connectButton = '[type="button"]';
 
 const manageWalletsCloseButton = '[class="Modal_close__2_zHW"]';
 const expect = require('@playwright/test').expect;
-
 /**
  * Represents the Seed Page with functionalities to manage and interact with it.
  * Inherits properties and behaviors from HomePage.
@@ -69,6 +72,13 @@ class SeedPage extends HomePage {
     await this.page
       .getByRole('button', { name: 'Connect', exact: true })
       .click();
+  }
+
+  async navigateToFillSeedFrom() {
+    await this.page.bringToFront();
+    await this.page.getByTestId('manage-wallets-button').click();
+    await this.page.getByRole('button', { name: 'Add a wallet' }).click();
+    await this.page.getByRole('link', { name: 'Import from seed phrase' }).click();
   }
 
   async verifyFirstWalletAdded() {

@@ -37,15 +37,15 @@ const test = base.test.extend({
     const multisigPage =  await pageFactory.createPage('multi')
     await use(multisigPage)
   },
-  ledgerPage: async ({pageFactory}, use) => {
+  ledgerPage: async ({ pageFactory }, use) => {
     const ledgerPage =  await pageFactory.createPage('ledger')
     await use(ledgerPage)
   },
-  homePage: async ({pageFactory}, use) => {
+  homePage: async ({ pageFactory }, use) => {
     const homePage =  await pageFactory.createPage('home')
     await use(homePage)
   },
-  privateKeyPage: async ({pageFactory}, use) => {
+  privateKeyPage: async ({ pageFactory }, use) => {
     const privateKeyPage =  await pageFactory.createPage('privateKey')
     await use(privateKeyPage)
   },

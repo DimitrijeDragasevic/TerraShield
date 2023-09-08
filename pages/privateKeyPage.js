@@ -1,5 +1,9 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 const BasePage = require('./homePage');
 const expect = require('@playwright/test').expect;
+
 
 
 /**
@@ -40,7 +44,7 @@ class PrivateKeyPage extends BasePage {
    * @param {string} privateKey The private key used to recover the wallet (default to process.env.PRIVATE_KEY).
    * @param {string} password The password used to secure the wallet (default to 'Testtest123!').
    */
-  async fillRecoverWalletFromPrivateKeyForm(privateKey, password) {
+  async fillRecoverWalletFromPrivateKeyForm(privateKey = process.env.PRIVATE_KEY, password = 'Testtest123!') {
     // Check if the text 'Import from private key' is visible on the page
     await expect(
       await this.page.getByText('Import from private key'),

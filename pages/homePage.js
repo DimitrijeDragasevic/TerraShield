@@ -95,6 +95,12 @@ class HomePage {
     await this.homePage.bringToFront();
     await this.homePage.getByRole('button', { name: 'Connect' }).click();
   }
+  async approveTransaction(password = 'Testtest123!') {
+    await this.homePage.reload();
+    await this.homePage.bringToFront();
+    await this.homePage.getByRole('textbox').fill(password);
+    await this.homePage.getByRole('button', { name: 'Post' }).click();
+  }
 
   async goToManageWalletsMenuFromHome() {
     await this.homePage.bringToFront();

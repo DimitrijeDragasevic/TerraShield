@@ -29,10 +29,14 @@ test("Swap 1 LUNA to AXLUSDT successfully", async ({ page, homePage }) => {
     page.getByRole("banner").getByRole("button").first()
   ).toBeVisible();
 
-  // ... add verification for other elements you've listed ...
 
   // 2. Set swap details
-  // Assuming you have some methods or actions to set the amount of LUNA to swap, etc.
+
+  // Click on the dropdown button to expand the options.
+  await page.click('button.SelectToken_toggle__2XoPn');
+  // Wait for the LUNA option to be visible and then click on it.
+  await page.click('div.TokenCard_main__1SRGp h1');
+
   await page.fill('input[name="input"]', "1");
   await page.getByRole("button", { name: "Select a coin" }).click();
   await page.locator("button").filter({ hasText: "axlUSDT" }).click(); // Example: Set 1 LUNA to swap
@@ -92,6 +96,7 @@ test("Swap 1 LUNA to AXLUSDT successfully", async ({ page, homePage }) => {
     .nth(7);
   const minRecivedvalue = parseFloat(await test.textContent());
   expect(minRecivedvalue).toBeCloseTo(axlUSDTValue, 0.2);
+  await page.pause();
 
   // This code to enabled when test id's are introduced
 

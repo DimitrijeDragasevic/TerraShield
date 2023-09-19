@@ -34,7 +34,28 @@ test("Verify governance page", async ({ page, homePage }) => {
 });
 
 test("Test create text proposal", async ({ page, homePage }) => {
-  // Navigation and initial setup
+  await createTextProposal(page, homePage);
+});
+
+test("Test vote yes", async ({ page, homePage }) => {
+
+  // Create new Text proposal
+  // click on it
+  // click vote
+  // click submit
+  // approve transaction
+  // click back
+  // see if your vote counts, verify if the text box has your vote
+});
+
+test("Test vote no", async ({ page, homePage }) => {});
+
+test("Test vote abstain", async ({ page, homePage }) => {});
+
+test("Test vote no with veto", async ({ page, homePage }) => {});
+
+
+async function createTextProposal(page, homePage) {
   await page.goto("/");
   await page.getByRole("button", { name: "Connect" }).click();
   await page.getByRole("button", { name: "Station (Extension)" }).click();
@@ -79,12 +100,5 @@ test("Test create text proposal", async ({ page, homePage }) => {
     '[class="ProposalHeader_title__EeQ2d"]'
   );
   expect(proposalName).toEqual(textToVerify);
-});
-
-test("Test vote yes", async ({ page, homePage }) => {});
-
-test("Test vote no", async ({ page, homePage }) => {});
-
-test("Test vote abstain", async ({ page, homePage }) => {});
-
-test("Test vote no with veto", async ({ page, homePage }) => {});
+  await page.pause()
+}

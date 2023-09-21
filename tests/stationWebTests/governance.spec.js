@@ -38,9 +38,10 @@ test("Test create text proposal", async ({ page, homePage }) => {
 });
 
 test("Test vote yes", async ({ page, homePage }) => {
-
-  // Create new Text proposal
-  // click on it
+  await createTextProposal(page, homePage);
+  await page.click('[class="ProposalHeader_title__EeQ2d"]');
+  await page.getByRole("button", { name: "Vote", exact: true }).click()
+  await page.pause()
   // click vote
   // click submit
   // approve transaction

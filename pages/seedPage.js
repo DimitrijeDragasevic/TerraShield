@@ -60,6 +60,8 @@ class SeedPage extends HomePage {
     await this.page.fill(inputconfirmPassword, password);
     await this.page.fill(inputMnemonicSeed, seed);
     await this.page.click(submitButton);
+    await this.page.locator('[class="AuthButton_button__3FEBJ SelectAddress_button__3wID-"]').last().click()
+    await this.page.click(submitButton);
     await this.page.waitForURL('**/recover#3');
 
     await expect(await this.page.getByTestId('DoneAllIcon')).toBeVisible();

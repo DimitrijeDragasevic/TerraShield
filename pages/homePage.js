@@ -310,9 +310,10 @@ class HomePage {
 
   // Evaluates settings and ensures proper functionality.
   async evaluateSettings() {
+    
     /* ---------------------------- Network Settings ---------------------------- */
-
     // Ensure the network settings button is visible and click.
+    await this.homePage.reload()
     await this.selectSettings('Network Mainnet');
 
     // Change to Testnet and ensure TESTNET banner is visible.
@@ -327,7 +328,6 @@ class HomePage {
     // Change back to Mainnet.
     await this.selectSettings('Network Classic');
     await this.selectSettings('Mainnets', false);
-
     /* ---------------------------- Language Settings --------------------------- */
 
     // Ensure the language settings button is visible and click.
@@ -414,8 +414,9 @@ class HomePage {
   // Evaluates manage wallet options and ensures proper functionality.
   async evaluateManageWallet() {
     /* ------------------------------ Export Wallet ----------------------------- */
-
+    await this.homePage.reload()
     // Ensure the Export wallet link is visible and click.
+    
     await this.selectManage('Export wallet');
 
     // Ensure error upon incorrect password entry.
@@ -584,7 +585,7 @@ class HomePage {
 
     // Evaluate the application of asset management filters.
     await this.evaluateFilter('Hide non-whitelisted', 'ATOM-OSMO LP');
-    await this.evaluateFilter('Hide low-balance', 'axlUSDT');
+    await this.evaluateFilter('Hide low-balance', 'NTRN');
   }
 }
 

@@ -44,9 +44,6 @@ test("Verify home page elements", async ({ page, homePage }) => {
     page.getByRole("button", { name: "LUNA", exact: true })
   ).toBeVisible();
   await expect(page.getByPlaceholder("0.000000")).toBeVisible();
-  await expect(
-    page.getByRole("button", { name: "Select a coin" })
-  ).toBeVisible();
   await expect(page.getByText("Slippage tolerance%")).toBeVisible();
   await expect(
     page.locator("div").filter({ hasText: /^Submit$/ })

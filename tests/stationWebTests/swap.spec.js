@@ -96,7 +96,6 @@ test("Swap 1 LUNA to AXLUSDT successfully", async ({ page, homePage }) => {
     .nth(7);
   const minRecivedvalue = parseFloat(await test.textContent());
   expect(minRecivedvalue).toBeCloseTo(axlUSDTValue, 0.2);
-  await page.pause();
 
   // This code to enabled when test id's are introduced
 

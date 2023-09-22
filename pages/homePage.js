@@ -21,7 +21,6 @@ class HomePage {
     this.homePage = await this.findExistingHomePage(stationExtensionUrl);
     
     if (!this.homePage) {
-      console.log('Creating new home page');
       this.homePage = await this.createHomePage(stationExtensionUrl);
     }
   }
@@ -42,7 +41,6 @@ class HomePage {
 
     const existingPage = pages.find(page => page.url().includes('index.html'));
     if (existingPage) {
-      console.log('This page already exists in the browser context');
       return existingPage;
     }
     

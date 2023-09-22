@@ -36,7 +36,6 @@ class NewWalletPage extends HomePage {
   async createPage() {
     const pagePromise = this.getPageWithUrlPart('auth/new');
     await this.homePage.getByText('New wallet').click();
-    console.log('New wallet page created');
     this.page = await pagePromise;
     this.page.waitForURL();
   }

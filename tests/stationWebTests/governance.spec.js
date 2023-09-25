@@ -37,24 +37,6 @@ test("Test create text proposal", async ({ page, homePage }) => {
   await createTextProposal(page, homePage);
 });
 
-test("Test vote yes", async ({ page, homePage }) => {
-  await createTextProposal(page, homePage);
-  await page.click('[class="ProposalHeader_title__EeQ2d"]');
-  await page.getByRole("button", { name: "Vote", exact: true }).click()
-  await page.pause()
-  // click vote
-  // click submit
-  // approve transaction
-  // click back
-  // see if your vote counts, verify if the text box has your vote
-});
-
-test("Test vote no", async ({ page, homePage }) => {});
-
-test("Test vote abstain", async ({ page, homePage }) => {});
-
-test("Test vote no with veto", async ({ page, homePage }) => {});
-
 
 async function createTextProposal(page, homePage) {
   await page.goto("/");
@@ -101,5 +83,4 @@ async function createTextProposal(page, homePage) {
     '[class="ProposalHeader_title__EeQ2d"]'
   );
   expect(proposalName).toEqual(textToVerify);
-  await page.pause()
 }

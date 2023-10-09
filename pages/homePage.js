@@ -587,6 +587,36 @@ class HomePage {
     await this.evaluateFilter('Hide non-whitelisted', 'ATOM-OSMO LP');
     await this.evaluateFilter('Hide low-balance', 'NTRN');
   }
+
+    /**
+   * Switches to a specified network.
+   *
+   * @param {string} network The name of the network to switch to (e.g., 'Mainnet', 'Testnet', 'Classic').
+   */
+  async switchNetwork(network) {
+    switch (network) {
+      case 'Mainnet':
+        await this.homePage.reload();
+        await this.selectSettings('Network Mainnet');
+        await this.selectSettings('Mainnets', false);
+        break;
+
+      case 'Testnet':
+        await this.selectSettings('Network Mainnet');  // Assumes starting from 'Network Mainnet'
+        await this.selectSettings('Testnets', false);
+        await this.expectText('TESTNET');
+        break;
+
+      case 'Classic':
+        await this.selectSettings('Network Testnet');  // Assumes transition from 'Network Testnet'
+        await this.selectSettings('Terra Classic', false);
+        await this.expectText('CLASSIC');
+        break;
+
+      default:
+        throw new Error(`Unsupported network: ${network}`);
+    }
+  } 
 }
 
 module.exports = HomePage;

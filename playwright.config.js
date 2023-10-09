@@ -1,4 +1,6 @@
 // @ts-check
+import dotenv from 'dotenv';
+dotenv.config();
 const path = require("path");
 const { defineConfig, devices, expect, chromium } = require("@playwright/test");
 const base = require("@playwright/test");
@@ -15,7 +17,7 @@ const test = base.test.extend({
         `--load-extension=${pathToExtension}`,
       ],
       viewport: { width: 1920, height: 1080 },
-      baseURL: "https://station.terra.money/",
+      baseURL: process.env.BASE_URL,
     });
     await context.waitForEvent("serviceworker");
     await use(context);
@@ -52,7 +54,7 @@ const test = base.test.extend({
 });
 
 const config = defineConfig({
-  testDir: "./tests",
+  testDir: "./tests/enterprise",
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,

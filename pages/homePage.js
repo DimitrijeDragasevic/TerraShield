@@ -602,12 +602,14 @@ class HomePage {
         break;
 
       case 'Testnet':
+        await this.homePage.reload();
         await this.selectSettings('Network Mainnet');  // Assumes starting from 'Network Mainnet'
         await this.selectSettings('Testnets', false);
         await this.expectText('TESTNET');
         break;
 
       case 'Classic':
+        await this.homePage.reload();
         await this.selectSettings('Network Testnet');  // Assumes transition from 'Network Testnet'
         await this.selectSettings('Terra Classic', false);
         await this.expectText('CLASSIC');

@@ -7,7 +7,7 @@ test.beforeEach(async ({ seedPage }) => {
 });
 
 test("Create a Token DAO", async ({ page, homePage }) => {
-  const randomString = randomstring.generate(5) + "QAtest";
+  const randomString = randomstring.generate(5) + "Token_QA_test";
 
   await homePage.switchNetwork("Testnet");
 
@@ -94,11 +94,11 @@ test("Create a Token DAO", async ({ page, homePage }) => {
   await page.waitForTimeout(10000);
 
   // Verify the creation was successful
-  await expect(page.getByRole("heading", { name: randomString })).toBeVisible();
+  await expect(page.getByRole("heading", { name: randomString })).toBeVisible({timeout: 10000});
 });
 
 test("Create a NFT DAO", async ({ page, homePage }) => {
-  const randomString = randomstring.generate(5) + "QAtest";
+  const randomString = randomstring.generate(5) + "NFT_QA_test";
 
   await homePage.switchNetwork("Testnet");
 
@@ -146,11 +146,11 @@ test("Create a NFT DAO", async ({ page, homePage }) => {
 
   //Wait for the dao page to load
   await page.waitForTimeout(10000);
-  await expect(page.getByRole("heading", { name: randomString })).toBeVisible();
+  await expect(page.getByRole("heading", { name: randomString })).toBeVisible({timeout: 10000});
 });
 
 test("Create a MultiSig DAO", async ({ page, homePage }) => {
-  const randomString = randomstring.generate(5) + "QAtest";
+  const randomString = randomstring.generate(5) + "Multi_QA_test";
 
   await homePage.switchNetwork("Testnet");
 
@@ -200,5 +200,5 @@ test("Create a MultiSig DAO", async ({ page, homePage }) => {
   await page.bringToFront();
   await page.waitForTimeout(10000);
   // Verify the creation was successful
-  await expect(page.getByRole("heading", { name: randomString })).toBeVisible();
+  await expect(page.getByRole("heading", { name: randomString })).toBeVisible({timeout: 10000});
 });

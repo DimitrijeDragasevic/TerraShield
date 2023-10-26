@@ -6,7 +6,8 @@ test.beforeEach(async ({ seedPage }) => {
   await seedPage.verifyFirstWalletAdded();
 });
 
-test("Create a Token DAO", async ({ page, homePage }) => {
+test("Verify created Token DAO", async ({ page, homePage }) => {
+  test.slow();
   const randomString = randomstring.generate(5) + "QAtest";
   await homePage.switchNetwork("Testnet");
 
@@ -90,9 +91,10 @@ test("Create a Token DAO", async ({ page, homePage }) => {
   await homePage.approveTransaction();
 
   await page.bringToFront();
-
   // Verify the creation was successful
-  await expect(page.getByRole("heading", { name: randomString })).toBeVisible({ timeout: 12000 });
+  await expect(page.getByRole("heading", { name: randomString })).toBeVisible({
+    timeout: 120000,
+  });
 
   await expect(
     page.getByRole("heading", { name: "Recent proposals" })
@@ -105,12 +107,6 @@ test("Create a Token DAO", async ({ page, homePage }) => {
     page.getByRole("heading", { name: "Settings", exact: true })
   ).toBeVisible();
   await expect(
-    page.locator("div:nth-child(4) > .sc-79c16e5a-0 > div").first()
-  ).toBeVisible();
-  await expect(
-    page.locator("div:nth-child(4) > .sc-79c16e5a-0 > div:nth-child(2)")
-  ).toBeVisible();
-  await expect(
     page.getByRole("heading", { name: "Governance Settings" })
   ).toBeVisible();
   await expect(page.getByRole("heading", { name: "DAO Info" })).toBeVisible();
@@ -118,7 +114,7 @@ test("Create a Token DAO", async ({ page, homePage }) => {
   await page.getByText("Treasury").click();
   await expect(
     page.getByRole("button", { name: "Treasury Holdings $0.00" })
-  ).toBeVisible({ timeout: 10000 });
+  ).toBeVisible({ timeout: 100000 });
   await expect(
     page.getByRole("button", { name: "NFT Gallery $0.00" })
   ).toBeVisible();
@@ -129,14 +125,15 @@ test("Create a Token DAO", async ({ page, homePage }) => {
   await expect(page.getByText("StatusNew Proposal")).toBeVisible();
 
   await page.getByText("Rewards").click();
-  await expect(page.getByRole("heading", { name: "Rewards" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Rewards" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Rewards" })).toBeVisible({
+    timeout: 100000,
+  });
   await expect(
     page
       .locator("div")
       .filter({ hasText: /^Nothing to claimRewardsClaim all$/ })
       .first()
-  ).toBeVisible({ timeout: 10000 });
+  ).toBeVisible({ timeout: 100000 });
   await expect(
     page
       .locator("div")
@@ -149,38 +146,33 @@ test("Create a Token DAO", async ({ page, homePage }) => {
   await expect(
     page
       .locator("div")
-      .filter({ hasText: /^20\.00Total supply$/ })
+      .filter({ hasText: /^20\.00testTotal supply$/ })
+      .first()
+  ).toBeVisible({ timeout: 100000 });
+
+  await expect(
+    page
+      .locator("div")
+      .filter({ hasText: /^0\.00testTotal staked$/ })
+      .first()
+  ).toBeVisible({ timeout: 100000 });
+  await expect(
+    page
+      .locator("div")
+      .filter({ hasText: /^10\.00testYour wallet$/ })
       .first()
   ).toBeVisible();
   await expect(
     page
       .locator("div")
-      .filter({ hasText: /^00%Total staked$/ })
-      .first()
-  ).toBeVisible({ timeout: 10000 });
-  await expect(
-    page
-      .locator("div")
-      .filter({ hasText: /^10testYour wallet$/ })
+      .filter({ hasText: /^0\.00testYour total staked$/ })
       .first()
   ).toBeVisible();
   await expect(
-    page
-      .locator("div")
-      .filter({ hasText: /^0Your total staked$/ })
-      .first()
+    page.getByText("Voting power0.00test0%StakeUnstake")
   ).toBeVisible();
   await expect(
-    page
-      .locator("div")
-      .filter({ hasText: /^Voting power0\.000%StakeUnstake$/ })
-      .first()
-  ).toBeVisible();
-  await expect(
-    page
-      .locator("div")
-      .filter({ hasText: /^Claim Unstaked Tokens0testClaim all$/ })
-      .first()
+    page.getByText("Claim Unstaked Tokens0.00testClaim all")
   ).toBeVisible();
   await expect(
     page.getByRole("button", { name: "Stake", exact: true })

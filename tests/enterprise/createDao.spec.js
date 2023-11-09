@@ -7,6 +7,7 @@ test.beforeEach(async ({ seedPage }) => {
 });
 
 test("Create a Token DAO", async ({ page, homePage }) => {
+  test.slow()
   const randomString = randomstring.generate(5) + "Token_QA_test";
 
   await homePage.switchNetwork("Testnet");

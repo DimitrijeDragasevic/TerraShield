@@ -9,7 +9,7 @@ TerraShield is an automation testing framework specifically crafted for end-to-e
 - Enterprise DAO V2
 
 ### Supported Wallets
-- Station wallet
+- Station wallet (approving transactions and a full test suite)
 
 ## Configuration
 Create an `.env` file in the root directory with these variables:

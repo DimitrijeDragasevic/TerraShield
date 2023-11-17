@@ -4,7 +4,7 @@ dotenv.config();
 const path = require("path");
 const { defineConfig, devices, expect, chromium } = require("@playwright/test");
 const base = require("@playwright/test");
-const PageFactory = require("./pages/pageFactory");
+const PageFactory = require("./stationPages/pageFactory");
 
 const test = base.test.extend({
   context: async ({}, use) => {

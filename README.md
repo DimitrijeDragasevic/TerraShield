@@ -17,6 +17,7 @@ Create an `.env` file in the root directory with these variables:
 - `PRIVATE_KEY`: "Private key of periodic vesting wallet"
 - `PRIVATE_KEY_TWO`: "Private key of second QA wallet"
 - `BASE_URL`: "Enterprise V2 URL"
+- `IS_TESTNET`: "true or false"
 
 ## Building a Custom Station Extension
 From the [Station Extension Repository](https://github.com/terra-money/station-extension):

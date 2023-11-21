@@ -177,4 +177,6 @@ test("Verify created Token DAO", async ({ page, homePage }) => {
   await expect(
     page.getByRole("button", { name: "Stake", exact: true })
   ).toBeVisible();
+  
+  console.log(`This is the url of the created DAO: ${page.url()}`)
 });

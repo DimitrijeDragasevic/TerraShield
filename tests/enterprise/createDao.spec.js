@@ -96,6 +96,8 @@ test("Create a Token DAO", async ({ page, homePage }) => {
 
   // Verify the creation was successful
   await expect(page.getByRole("heading", { name: randomString })).toBeVisible({timeout: 10000});
+
+  console.log(`This is the url of the created DAO: ${page.url()}`)
 });
 
 test("Create a NFT DAO", async ({ page, homePage }) => {
@@ -148,6 +150,8 @@ test("Create a NFT DAO", async ({ page, homePage }) => {
   //Wait for the dao page to load
   await page.waitForTimeout(10000);
   await expect(page.getByRole("heading", { name: randomString })).toBeVisible({timeout: 10000});
+
+  console.log(`This is the url of the created DAO: ${page.url()}`)
 });
 
 test("Create a MultiSig DAO", async ({ page, homePage }) => {
@@ -202,4 +206,6 @@ test("Create a MultiSig DAO", async ({ page, homePage }) => {
   await page.waitForTimeout(10000);
   // Verify the creation was successful
   await expect(page.getByRole("heading", { name: randomString })).toBeVisible({timeout: 10000});
+
+  console.log(`This is the url of the created DAO: ${page.url()}`)
 });

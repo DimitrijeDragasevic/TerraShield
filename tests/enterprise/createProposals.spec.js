@@ -411,4 +411,6 @@ async function createMultiSigDao(page, homePage) {
   await expect(page.getByRole("heading", { name: randomString })).toBeVisible({
     timeout: 100000,
   });
+
+  console.log(`This is the url of the created DAO: ${page.url()}`)
 }

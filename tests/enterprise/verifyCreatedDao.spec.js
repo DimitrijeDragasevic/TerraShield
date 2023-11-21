@@ -1,15 +1,20 @@
+import dotenv from 'dotenv';
 const { test, expect } = require("../../playwright.config");
 const randomstring = require("randomstring");
+dotenv.config();
 
-test.beforeEach(async ({ seedPage }) => {
+test.beforeEach(async ({ seedPage, homePage }) => {
   await seedPage.fillSeedForm("Test wallet 1", "Testtest123!");
   await seedPage.verifyFirstWalletAdded();
+  const TESTNET = process.env.IS_TESTNET === 'true';
+  if (TESTNET) {
+      await homePage.switchNetwork("Testnet");
+  }
 });
 
 test("Verify created Token DAO", async ({ page, homePage }) => {
   test.slow();
   const randomString = randomstring.generate(5) + "QAtest";
-  await homePage.switchNetwork("Testnet");
 
   await page.goto("/");
   await page
@@ -177,6 +182,6 @@ test("Verify created Token DAO", async ({ page, homePage }) => {
   await expect(
     page.getByRole("button", { name: "Stake", exact: true })
   ).toBeVisible();
-  
+
   console.log(`This is the url of the created DAO: ${page.url()}`)
 });

@@ -1,16 +1,20 @@
+import dotenv from 'dotenv';
 const { test, expect } = require("../../playwright.config");
 const randomstring = require("randomstring");
+dotenv.config();
 
-test.beforeEach(async ({ seedPage }) => {
+test.beforeEach(async ({ seedPage, homePage }) => {
   await seedPage.fillSeedForm("Test wallet 1", "Testtest123!");
   await seedPage.verifyFirstWalletAdded();
+  const TESTNET = process.env.IS_TESTNET === 'true';
+  if (TESTNET) {
+      await homePage.switchNetwork("Testnet");
+  }
 });
 
 test("Create a Token DAO", async ({ page, homePage }) => {
   test.slow()
   const randomString = randomstring.generate(5) + "Token_QA_test";
-
-  await homePage.switchNetwork("Testnet");
 
   await page.goto("/");
   await page
@@ -103,8 +107,6 @@ test("Create a Token DAO", async ({ page, homePage }) => {
 test("Create a NFT DAO", async ({ page, homePage }) => {
   const randomString = randomstring.generate(5) + "NFT_QA_test";
 
-  await homePage.switchNetwork("Testnet");
-
   await page.goto("/");
   await page
     .locator("div")
@@ -156,8 +158,6 @@ test("Create a NFT DAO", async ({ page, homePage }) => {
 
 test("Create a MultiSig DAO", async ({ page, homePage }) => {
   const randomString = randomstring.generate(5) + "Multi_QA_test";
-
-  await homePage.switchNetwork("Testnet");
 
   await page.goto("/");
   await page

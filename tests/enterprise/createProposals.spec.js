@@ -1,9 +1,15 @@
+import dotenv from 'dotenv';
 const { test, expect } = require("../../playwright.config");
 const randomstring = require("randomstring");
+dotenv.config();
 
-test.beforeEach(async ({ seedPage }) => {
+test.beforeEach(async ({ seedPage, homePage }) => {
   await seedPage.fillSeedForm("Test wallet 1", "Testtest123!");
   await seedPage.verifyFirstWalletAdded();
+  const TESTNET = process.env.IS_TESTNET === 'true';
+  if (TESTNET) {
+      await homePage.switchNetwork("Testnet");
+  }
 });
 
 test("Create a text proposal", async ({ page, homePage }) => {
@@ -359,8 +365,6 @@ test("Create an update whitelist proposal", async ({ page, homePage }) => {
 
 async function createMultiSigDao(page, homePage) {
   const randomString = randomstring.generate(5) + "_test_proposals";
-
-  await homePage.switchNetwork("Testnet");
 
   await page.goto("/");
   await page

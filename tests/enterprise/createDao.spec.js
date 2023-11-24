@@ -85,9 +85,6 @@ test("Create a Token DAO", async ({ page, homePage }) => {
   await page.getByPlaceholder("Enter minimum weight").click();
   await page.getByPlaceholder("Enter minimum weight").fill("1");
   await page.getByRole("button", { name: "Next" }).click();
-  await page.getByRole("button", { name: "Add" }).click();
-  await page.getByPlaceholder("Search for an asset").click();
-  await page.getByRole("button", { name: "LUNA uluna" }).click();
   await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Next" }).click();
@@ -140,8 +137,6 @@ test("Create a NFT DAO", async ({ page, homePage }) => {
   await page.getByRole("button", { name: "Next" }).click();
   await page.getByPlaceholder("Enter minimum weight").fill("10");
   await page.getByRole("button", { name: "Next" }).click();
-  await page.getByRole("button", { name: "Add" }).click();
-  await page.getByRole("button", { name: "LUNA uluna" }).click();
   await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Next" }).click();
@@ -194,8 +189,6 @@ test("Create a MultiSig DAO", async ({ page, homePage }) => {
   await page.getByPlaceholder("Enter minimum weight").click();
   await page.getByPlaceholder("Enter minimum weight").fill("10");
   await page.getByRole("button", { name: "Next" }).click();
-  await page.getByRole("button", { name: "Add" }).click();
-  await page.getByRole("button", { name: "LUNA uluna" }).click();
   await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Next" }).click();

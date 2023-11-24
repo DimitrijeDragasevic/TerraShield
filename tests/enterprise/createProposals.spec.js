@@ -401,8 +401,6 @@ async function createMultiSigDao(page, homePage) {
   await page.getByPlaceholder("Enter minimum weight").click();
   await page.getByPlaceholder("Enter minimum weight").fill("10");
   await page.getByRole("button", { name: "Next" }).click();
-  await page.getByRole("button", { name: "Add" }).click();
-  await page.getByRole("button", { name: "LUNA uluna" }).click();
   await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Next" }).click();

@@ -1,4 +1,4 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 const { test, expect } = require("../../playwright.config");
 const randomstring = require("randomstring");
 dotenv.config();
@@ -6,9 +6,9 @@ dotenv.config();
 test.beforeEach(async ({ seedPage, homePage }) => {
   await seedPage.fillSeedForm("Test wallet 1", "Testtest123!");
   await seedPage.verifyFirstWalletAdded();
-  const TESTNET = process.env.IS_TESTNET === 'true';
+  const TESTNET = process.env.IS_TESTNET === "true";
   if (TESTNET) {
-      await homePage.switchNetwork("Testnet");
+    await homePage.switchNetwork("Testnet");
   }
 });
 
@@ -414,5 +414,5 @@ async function createMultiSigDao(page, homePage) {
     timeout: 100000,
   });
 
-  console.log(`This is the url of the created DAO: ${page.url()}`)
+  console.log(`This is the url of the created DAO: ${page.url()}`);
 }

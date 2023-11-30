@@ -86,7 +86,7 @@ test("Create an Update DAO information proposal", async ({
   await expect(page.getByText("Quorum 30%")).toBeVisible();
 });
 
-test("Create an update configuration proposal", async ({
+test("Create an Update Dao settings proposal", async ({
   page,
   homePage,
 }) => {

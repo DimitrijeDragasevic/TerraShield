@@ -48,12 +48,15 @@ test("Create a text proposal", async ({ page, homePage }) => {
   await expect(page.getByRole("heading", { name: "Votes" })).toBeVisible();
 });
 
-test("Create a metadata proposal", async ({ page, homePage }) => {
+test("Create an Update DAO information proposal", async ({
+  page,
+  homePage,
+}) => {
   test.slow();
   await createMultiSigDao(page, homePage);
   await page.getByText("Proposals", { exact: true }).click();
   await page.getByRole("link", { name: "New Proposal" }).click();
-  await page.getByText("Update metadata").click();
+  await page.getByText("Update DAO information").click();
   await page.getByRole("link", { name: "Next" }).click();
   await page
     .getByPlaceholder("Enter proposal title")
@@ -83,7 +86,7 @@ test("Create a metadata proposal", async ({ page, homePage }) => {
   await expect(page.getByText("Quorum 30%")).toBeVisible();
 });
 
-test("Create an update configuration proposal @known-bug", async ({
+test("Create an update configuration proposal", async ({
   page,
   homePage,
 }) => {
@@ -91,6 +94,34 @@ test("Create an update configuration proposal @known-bug", async ({
   await createMultiSigDao(page, homePage);
   await page.getByText("Proposals", { exact: true }).click();
   await page.getByRole("link", { name: "New Proposal" }).click();
+  await page
+    .locator("div")
+    .filter({ hasText: /^Update DAO settings$/ })
+    .click();
+  await page.getByRole("link", { name: "Next" }).click();
+
+  await page.locator(".sc-ade02c7d-1").first().click();
+  await page
+    .getByPlaceholder("Enter proposal title")
+    .fill("Test update dao settings");
+  await page
+    .getByPlaceholder("Enter proposal description")
+    .fill("Testing the update of settings");
+  await page.getByRole("button", { name: "Create" }).click();
+
+  await homePage.approveTransaction();
+
+  await page.bringToFront();
+  await page.waitForTimeout(10000);
+
+  await page.getByText("7 days").click();
+  // this is the arrow between the two updated days (Like what changed)
+  await page
+    .locator("div")
+    .filter({ hasText: /^7 days30 days$/ })
+    .getByRole("img")
+    .click();
+  await page.getByText("30 days").click();
 });
 
 test("Create an update whitelist NFT proposal", async ({ page, homePage }) => {

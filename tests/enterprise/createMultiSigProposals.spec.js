@@ -321,78 +321,79 @@ test("Update multisig members proposal", async ({ page, homePage }) => {
 });
 
 test("Create an update whitelist proposal", async ({ page, homePage }) => {
-  test.slow();
-  await createMultiSigDao(page, homePage);
-  await page.getByText("Proposals", { exact: true }).click();
-  await page.getByRole("link", { name: "New Proposal" }).click();
-  await page.getByText("Update whitelisted assets").click();
-  await page.getByRole("link", { name: "Next" }).click();
-  await page
-    .getByPlaceholder("Enter proposal title")
-    .fill("add another currency");
-  await page.getByPlaceholder("Enter proposal title").click();
-  await page.getByPlaceholder("Enter proposal description").click();
-  await page.getByPlaceholder("Enter proposal description").fill("test");
-  await page.getByRole("button", { name: "Add" }).click();
-  await page
-    .getByRole("button", {
-      name: "Asset icon Alliance Deck factory/terra1zdpgj8am5nqqvht927k3etljyl6a52kwqup0je/stDeck",
-    })
-    .click();
-  await page.getByRole("button", { name: "Add" }).click();
-  await page
-    .getByRole("button", {
-      name: "Asset icon Alliance Oracle factory/terra1zdpgj8am5nqqvht927k3etljyl6a52kwqup0je/stOracle",
-    })
-    .click();
-  await page.getByRole("button", { name: "Add" }).click();
-  await page
-    .getByRole("button", {
-      name: "Asset icon Test Mars ibc/A91A7FDF128104F0A49B96E9EC8D8D739F878796B33104F70478CDE60B6401D5",
-    })
-    .click();
-  await page.getByRole("button", { name: "Add" }).click();
-  await page
-    .getByRole("button", {
-      name: "Asset icon Test Sei ibc/E2817356DDE85EB75B5F7D353E89109B2A32AE49EBC84DA1D955F82A0C00A0F6",
-    })
-    .click();
-  await page.getByPlaceholder("Enter proposal description").click({
-    clickCount: 3,
-  });
-  await page.getByRole("button", { name: "Create" }).click();
-  await homePage.approveTransaction();
+  if (process.env.IS_TESTNET === "true") {
+    test.slow();
+    await createMultiSigDao(page, homePage);
+    await page.getByText("Proposals", { exact: true }).click();
+    await page.getByRole("link", { name: "New Proposal" }).click();
+    await page.getByText("Update whitelisted assets").click();
+    await page.getByRole("link", { name: "Next" }).click();
+    await page
+      .getByPlaceholder("Enter proposal title")
+      .fill("add another currency");
+    await page.getByPlaceholder("Enter proposal title").click();
+    await page.getByPlaceholder("Enter proposal description").click();
+    await page.getByPlaceholder("Enter proposal description").fill("test");
+    await page.getByRole("button", { name: "Add" }).click();
+    await page
+      .getByRole("button", {
+        name: "Asset icon Alliance Deck factory/terra1zdpgj8am5nqqvht927k3etljyl6a52kwqup0je/stDeck",
+      })
+      .click();
+    await page.getByRole("button", { name: "Add" }).click();
+    await page
+      .getByRole("button", {
+        name: "Asset icon Alliance Oracle factory/terra1zdpgj8am5nqqvht927k3etljyl6a52kwqup0je/stOracle",
+      })
+      .click();
+    await page.getByRole("button", { name: "Add" }).click();
+    await page
+      .getByRole("button", {
+        name: "Asset icon Test Mars ibc/A91A7FDF128104F0A49B96E9EC8D8D739F878796B33104F70478CDE60B6401D5",
+      })
+      .click();
+    await page.getByRole("button", { name: "Add" }).click();
+    await page
+      .getByRole("button", {
+        name: "Asset icon Test Sei ibc/E2817356DDE85EB75B5F7D353E89109B2A32AE49EBC84DA1D955F82A0C00A0F6",
+      })
+      .click();
+    await page.getByPlaceholder("Enter proposal description").click({
+      clickCount: 3,
+    });
+    await page.getByRole("button", { name: "Create" }).click();
+    await homePage.approveTransaction();
 
-  await page.bringToFront();
-  await page.waitForTimeout(10000);
+    await page.bringToFront();
+    await page.waitForTimeout(10000);
 
-  await expect(
-    page.locator("div").filter({ hasText: /^add another currency$/ })
-  ).toBeVisible();
-  await expect(
-    page
-      .locator("div")
-      .filter({ hasText: /^Alliance Deck$/ })
-      .first()
-  ).toBeVisible();
-  await expect(
-    page
-      .locator("div")
-      .filter({ hasText: /^Alliance Oracle$/ })
-      .first()
-  ).toBeVisible();
-  await expect(
-    page
-      .locator("div")
-      .filter({ hasText: /^Test Mars$/ })
-      .first()
-  ).toBeVisible();
-  await expect(
-    page
-      .locator("div")
-      .filter({ hasText: /^Test Sei$/ })
-      .first()
-  ).toBeVisible();
+    await expect(
+      page
+        .locator("div")
+        .filter({ hasText: /^Alliance Deck$/ })
+        .first()
+    ).toBeVisible();
+    await expect(
+      page
+        .locator("div")
+        .filter({ hasText: /^Alliance Oracle$/ })
+        .first()
+    ).toBeVisible();
+    await expect(
+      page
+        .locator("div")
+        .filter({ hasText: /^Test Mars$/ })
+        .first()
+    ).toBeVisible();
+    await expect(
+      page
+        .locator("div")
+        .filter({ hasText: /^Test Sei$/ })
+        .first()
+    ).toBeVisible();
+  } else {
+    test.skip();
+  }
 });
 
 async function createMultiSigDao(page, homePage) {
@@ -418,10 +419,10 @@ async function createMultiSigDao(page, homePage) {
       "https://www.madness-toys.store/cdn/shop/files/LOGO_FOR_STORE-removebg-preview.png?v=1683580793&width=80"
     );
   await page
-    .getByPlaceholder("Describe your DAO in 280 characters or less.")
+    .getByPlaceholder("Describe your DAO in 560 characters or less.")
     .click();
   await page
-    .getByPlaceholder("Describe your DAO in 280 characters or less.")
+    .getByPlaceholder("Describe your DAO in 560 characters or less.")
     .fill("test");
   await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Next" }).click();

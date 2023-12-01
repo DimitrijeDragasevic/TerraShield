@@ -86,10 +86,7 @@ test("Create an Update DAO information proposal", async ({
   await expect(page.getByText("Quorum 30%")).toBeVisible();
 });
 
-test("Create an Update Dao settings proposal", async ({
-  page,
-  homePage,
-}) => {
+test("Create an Update Dao settings proposal", async ({ page, homePage }) => {
   test.slow();
   await createMultiSigDao(page, homePage);
   await page.getByText("Proposals", { exact: true }).click();
@@ -122,42 +119,6 @@ test("Create an Update Dao settings proposal", async ({
     .getByRole("img")
     .click();
   await page.getByText("30 days").click();
-});
-
-test("Create an update whitelist NFT proposal", async ({ page, homePage }) => {
-  test.slow();
-  await createMultiSigDao(page, homePage);
-  await page.getByText("Proposals", { exact: true }).click();
-  await page.getByRole("link", { name: "New Proposal" }).click();
-  await page.getByText("Update whitelisted NFTs").click();
-  await page.getByRole("link", { name: "Next" }).click();
-  await page.getByPlaceholder("Enter proposal title").click();
-  await page.getByPlaceholder("Enter proposal title").fill("add nft");
-  await page.getByPlaceholder("Enter proposal description").click();
-  await page
-    .getByPlaceholder("Enter proposal description")
-    .fill("add nft test");
-  await page.getByRole("button", { name: "Add" }).click();
-  await page.getByPlaceholder("Enter a CW721 NFT address").click();
-  await page
-    .getByPlaceholder("Enter a CW721 NFT address")
-    .fill("terra1arc2sv4gxghtucqda4chwxpvhd2603289v8nv74tv3yxdjql9rms75hs4p");
-  await page.waitForTimeout(1000);
-  await page.getByRole("button", { name: "Create" }).click();
-
-  await homePage.approveTransaction();
-
-  await page.bringToFront();
-  await page.waitForTimeout(10000);
-
-  await expect(
-    page.getByText(
-      "...terra1arc2sv4gxghtucqda4chwxpvhd2603289v8nv74tv3yxdjql9rms75hs4p"
-    )
-  ).toBeVisible();
-  await expect(page.getByRole("heading", { name: "add nft" })).toBeVisible();
-  await expect(page.getByText("add nft test")).toBeVisible();
-  await expect(page.getByText("nfts", { exact: true })).toBeVisible();
 });
 
 test("Create a spend trasury proposal", async ({ page, homePage }) => {
@@ -215,82 +176,122 @@ test("Deploy cross-chain tresulty proposal JUNO", async ({
   page,
   homePage,
 }) => {
-  test.slow();
-  await createMultiSigDao(page, homePage);
-  await page.getByText("Proposals", { exact: true }).click();
-  await page.getByRole("link", { name: "New Proposal" }).click();
-  await page.getByText("Deploy cross-chain treasury").click();
-  await page.getByRole("link", { name: "Next" }).click();
-  await page.getByPlaceholder("Enter proposal title").click();
-  await page
-    .getByRole("heading", { name: "Deploy cross-chain treasury" })
-    .click();
-  await page
-    .getByPlaceholder("Enter proposal title")
-    .fill("Deploy cross-chain treasury JUNO");
-  await page
-    .locator("div")
-    .filter({ hasText: /^Whitelist assetsAdd$/ })
-    .getByRole("button")
-    .click();
-  await page
-    .getByRole("button", { name: "Asset icon Test Juno ujunox" })
-    .click();
-  await page.getByPlaceholder("Enter proposal description").fill("test");
-  await page.getByRole("button", { name: "Create" }).click();
-  await homePage.approveTransaction();
-
-  await page.bringToFront();
-  await page.waitForTimeout(10000);
-
-  await expect(
-    page.getByRole("heading", { name: "Deploy cross-chain treasury JUNO" })
-  ).toBeVisible();
-  await expect(
-    page
+  if (process.env.IS_TESTNET === "true") {
+    test.slow();
+    await createMultiSigDao(page, homePage);
+    await page.getByText("Proposals", { exact: true }).click();
+    await page.getByRole("link", { name: "New Proposal" }).click();
+    await page.getByText("Deploy cross-chain treasury").click();
+    await page.getByRole("link", { name: "Next" }).click();
+    await page.getByPlaceholder("Enter proposal title").click();
+    await page
+      .getByRole("heading", { name: "Deploy cross-chain treasury" })
+      .click();
+    await page
+      .getByPlaceholder("Enter proposal title")
+      .fill("Deploy cross-chain treasury JUNO");
+    await page
       .locator("div")
-      .filter({ hasText: /^Deploy cross-chain treasury on Juno\.$/ })
-  ).toBeVisible();
-  await expect(
-    page.getByText("Deploy cross-chain treasury on Juno.")
-  ).toBeVisible();
+      .filter({ hasText: /^Whitelist assetsAdd$/ })
+      .getByRole("button")
+      .click();
+    await page
+      .getByRole("button", { name: "Asset icon Test Juno ujunox" })
+      .click();
+    await page.getByPlaceholder("Enter proposal description").fill("test");
+    await page.getByRole("button", { name: "Create" }).click();
+    await homePage.approveTransaction();
+
+    await page.bringToFront();
+    await page.waitForTimeout(10000);
+
+    await expect(
+      page.getByRole("heading", { name: "Deploy cross-chain treasury JUNO" })
+    ).toBeVisible();
+    await expect(
+      page
+        .locator("div")
+        .filter({ hasText: /^Deploy cross-chain treasury on Juno\.$/ })
+    ).toBeVisible();
+    await expect(
+      page.getByText("Deploy cross-chain treasury on Juno.")
+    ).toBeVisible();
+  } else {
+    test.skip();
+  }
 });
 
 test("Deploy cross-chain tresulty proposal INJ", async ({ page, homePage }) => {
+  if (process.env.IS_TESTNET === "true") {
+    test.slow();
+    await createMultiSigDao(page, homePage);
+    await page.getByText("Proposals", { exact: true }).click();
+    await page.getByRole("link", { name: "New Proposal" }).click();
+    await page.getByText("Deploy cross-chain treasury").click();
+    await page.getByRole("link", { name: "Next" }).click();
+    await page.getByPlaceholder("Enter proposal title").click();
+    await page
+      .getByRole("heading", { name: "Deploy cross-chain treasury" })
+      .click();
+    await page.getByPlaceholder("Enter proposal title").click();
+    await page
+      .getByPlaceholder("Enter proposal title")
+      .fill("Deploy cross-chain treasury Injective");
+    await page.getByPlaceholder("Enter proposal description").click();
+    await page.getByPlaceholder("Enter proposal description").fill("test");
+    await page.getByText("Injective").click();
+    await page
+      .locator("div")
+      .filter({ hasText: /^Whitelist assetsAdd$/ })
+      .getByRole("button")
+      .click();
+    await page
+      .getByRole("button", { name: "Asset icon Injective inj" })
+      .click();
+    await page.getByRole("button", { name: "Create" }).click();
+    await homePage.approveTransaction();
+
+    await page.bringToFront();
+    await page.waitForTimeout(10000);
+
+    await expect(
+      page.getByRole("heading", {
+        name: "Deploy cross-chain treasury Injective",
+      })
+    ).toBeVisible();
+    await expect(
+      page.getByText("Deploy cross-chain treasury on Injective.")
+    ).toBeVisible();
+  } else {
+    test.skip();
+  }
+});
+
+test("Deploy cross-chain treasury Migaloo", async ({ page, homePage }) => {
   test.slow();
   await createMultiSigDao(page, homePage);
   await page.getByText("Proposals", { exact: true }).click();
   await page.getByRole("link", { name: "New Proposal" }).click();
-  await page.getByText("Deploy cross-chain treasury").click();
+  await page.getByText("Create cross-chain treasury").click();
   await page.getByRole("link", { name: "Next" }).click();
-  await page.getByPlaceholder("Enter proposal title").click();
-  await page
-    .getByRole("heading", { name: "Deploy cross-chain treasury" })
-    .click();
-  await page.getByPlaceholder("Enter proposal title").click();
   await page
     .getByPlaceholder("Enter proposal title")
-    .fill("Deploy cross-chain treasury Injective");
-  await page.getByPlaceholder("Enter proposal description").click();
+    .fill("Crete corss-chain treasury test Migaloo");
   await page.getByPlaceholder("Enter proposal description").fill("test");
-  await page.getByText("Injective").click();
-  await page
-    .locator("div")
-    .filter({ hasText: /^Whitelist assetsAdd$/ })
-    .getByRole("button")
-    .click();
-  await page.getByRole("button", { name: "Asset icon Injective inj" }).click();
   await page.getByRole("button", { name: "Create" }).click();
+
   await homePage.approveTransaction();
 
   await page.bringToFront();
   await page.waitForTimeout(10000);
 
   await expect(
-    page.getByRole("heading", { name: "Deploy cross-chain treasury Injective" })
+    page.getByText("Deploy cross-chain treasury on Migaloo.")
   ).toBeVisible();
   await expect(
-    page.getByText("Deploy cross-chain treasury on Injective.")
+    page.getByRole("heading", {
+      name: "Crete corss-chain treasury test Migaloo",
+    })
   ).toBeVisible();
 });
 

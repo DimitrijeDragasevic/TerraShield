@@ -9,7 +9,7 @@ const PageFactory = require("./stationPages/pageFactory");
 const test = base.test.extend({
   context: async ({}, use) => {
     const pathToExtension =
-      "/Users/dimitrijedragasevic/Desktop/projects/station-extension/build";
+      "/Users/dimitrijedragasevic/Desktop/station-beta/build";
     const context = await chromium.launchPersistentContext("", {
       headless: false,
       args: [

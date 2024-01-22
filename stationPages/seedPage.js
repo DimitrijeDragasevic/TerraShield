@@ -1,8 +1,7 @@
 
+import { HomePage } from './homePage';
 import dotenv from 'dotenv';
 dotenv.config();
-
-const HomePage = require('./homePage');
 
 const inputName = '[name="name"]';
 const inputPassword = '[name="password"]';
@@ -14,6 +13,8 @@ const submitButton = '[type="submit"]';
 const allDoneIcon = '[data-testid="DoneAllIcon"]';
 const connectButton = '[type="button"]';
 
+const walletOptionBip330= '[ data-testid="details-section-330"]'
+
 const manageWalletsCloseButton = '[class="Modal_close__2_zHW"]';
 const expect = require('@playwright/test').expect;
 /**
@@ -21,7 +22,7 @@ const expect = require('@playwright/test').expect;
  * Inherits properties and behaviors from HomePage.
  */
 
-class SeedPage extends HomePage {
+export class SeedPage extends HomePage {
   /**
    * Constructor initializes a new instance of the SeedPage class.
    * @param {Object} browserContext - The browser context in which the page operates.
@@ -41,7 +42,8 @@ class SeedPage extends HomePage {
    */
   async createPage() {
     const pagePromise = this.getPageWithUrlPart('auth/recover');
-    await this.homePage.getByText('Import from seed phrase').click();
+    await this.homePage.getByRole('button').click()
+    await this.homePage.getByRole('button', { name: 'Import existing wallet' }).click();
     this.page = await pagePromise;
   }
 
@@ -56,23 +58,26 @@ class SeedPage extends HomePage {
     await this.page.bringToFront();
     await this.page.waitForLoadState();
     await this.page.fill(inputName, walletName);
-    await this.page.fill(inputPassword, password);
-    await this.page.fill(inputconfirmPassword, password);
+    
     await this.page.fill(inputMnemonicSeed, seed);
     await this.page.click(submitButton);
-    await this.page.locator('[class="AuthButton_button__3FEBJ SelectAddress_button__3wID-"]').last().click()
+   
+    await this.page.click(walletOptionBip330);
+  
     await this.page.click(submitButton);
-    await this.page.waitForURL('**/recover#3');
-
-    await expect(await this.page.getByTestId('DoneAllIcon')).toBeVisible();
+    await this.page.fill(inputPassword, password);
+    await this.page.fill(inputconfirmPassword, password);
+    await this.page.click(submitButton);
+    await expect(await this.page.getByRole('heading', { name: 'Success!' })).toBeVisible();
+    await expect(await this.page.getByRole('heading', { name: 'The wallet was created' })).toBeVisible()
     await expect(
       this.page.getByRole('button', {
-        name: 'Connect',
+        name: 'Done',
         exact: true,
       }),
     ).toBeVisible();
     await this.page
-      .getByRole('button', { name: 'Connect', exact: true })
+      .getByRole('button', { name: 'Done', exact: true })
       .click();
   }
 
@@ -82,24 +87,8 @@ class SeedPage extends HomePage {
     await this.page.getByRole('button', { name: 'Add a wallet' }).click();
     await this.page.getByRole('link', { name: 'Import from seed phrase' }).click();
   }
-
-  async verifyFirstWalletAdded() {
-    await expect(
-      await this.page.getByRole('button', {
-        name: 'Test wallet 1',
-      }),
-    ).toBeVisible();
-    await this.page.getByText('Test wallet 1').click();
-    await expect(await this.page.getByText('Manage Wallets')).toBeVisible();
-    await expect(
-      await this.page.getByRole('button', {
-        name: 'Test wallet 1 terra1...6cw6qmfdnl9un23yxs',
-      }),
-    ).toBeVisible();
-    await expect(await this.page.getByText('Add a wallet')).toBeVisible();
-    await this.page.click(manageWalletsForm.manageWalletsCloseButton);
-  }
 }
+
 // Exporting the SeedPage class and its associated elements for external use.
 
 const seedFormElements = {

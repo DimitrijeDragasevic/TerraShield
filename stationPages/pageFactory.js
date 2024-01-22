@@ -1,11 +1,13 @@
-const { NewWalletPage } = require('./newWalletPage');
-const { SeedPage } = require('./seedPage');
-const MultiSigPage = require('./multiSigPage');
-const LedgerPage = require('./ledgerPage');
-const HomePage = require('./homePage');
-const PrivateKeyPage = require('./privateKeyPage');
+import { HomePage } from './homePage';
+import {NewWalletPage} from './newWalletPage';
+import {SeedPage} from './seedPage';
+import { MultiSigPage } from './multiSigPage';
+import { LedgerPage } from './ledgerPage';
+import { PrivateKeyPage } from './privateKeyPage';
 
-class PageFactory {
+
+
+export class PageFactory {
   constructor(browserContext) {
     this.browserContext = browserContext;
     this.pageRegistry = {}; // Cache of created pages
@@ -46,4 +48,4 @@ class PageFactory {
   }
 }
 
-module.exports = PageFactory;
+// module.exports = PageFactory;

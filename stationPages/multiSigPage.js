@@ -1,11 +1,11 @@
-const HomePage = require('./homePage');
+import { HomePage } from './homePage';
 const expect = require('@playwright/test').expect;
 
 /**
  * MultiSigPage extends HomePage and provides functionalities specific to the "MultiSig Wallet" page.
  */
 
-class MultiSigPage extends HomePage {
+export class MultiSigPage extends HomePage {
   /**
    * Constructor initializes a new instance of the MultiSigPage class
    *
@@ -90,5 +90,3 @@ class MultiSigPage extends HomePage {
     return true;
   }
 }
-
-module.exports = MultiSigPage;

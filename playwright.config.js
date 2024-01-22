@@ -4,12 +4,13 @@ dotenv.config();
 const path = require("path");
 const { defineConfig, devices, expect, chromium } = require("@playwright/test");
 const base = require("@playwright/test");
-const PageFactory = require("./stationPages/pageFactory");
+import {PageFactory} from './stationPages/pageFactory'
+
 
 const test = base.test.extend({
   context: async ({}, use) => {
     const pathToExtension =
-      "/Users/dimitrijedragasevic/Desktop/station-beta/build";
+      "/Users/dimitrijedragasevic/Desktop/projects/station-wallet/station-extension/build";
     const context = await chromium.launchPersistentContext("", {
       headless: false,
       args: [
@@ -43,7 +44,7 @@ const test = base.test.extend({
     const ledgerPage = await pageFactory.createPage("ledger");
     await use(ledgerPage);
   },
-  homePage: async ({ pageFactory }, use) => {
+  homePage: async ({ pageFactory }, use) => {  
     const homePage = await pageFactory.createPage("home");
     await use(homePage);
   },

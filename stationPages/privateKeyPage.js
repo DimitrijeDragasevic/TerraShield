@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-const BasePage = require('./homePage');
+import { HomePage } from './homePage';
 const expect = require('@playwright/test').expect;
 
 
@@ -10,7 +10,7 @@ const expect = require('@playwright/test').expect;
  * PrivateKeyPage extends BasePage and offers functionality to manage and interact with the "Import from private key" page.
  */
 
-class PrivateKeyPage extends BasePage {
+export class PrivateKeyPage extends HomePage {
   /**
    * Constructor initializes a new instance of the PrivateKeyPage class.
    *
@@ -85,4 +85,4 @@ class PrivateKeyPage extends BasePage {
   }
 }
 
-module.exports = PrivateKeyPage;
+// module.exports = PrivateKeyPage;

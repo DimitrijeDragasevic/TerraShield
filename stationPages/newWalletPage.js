@@ -1,11 +1,11 @@
-const HomePage = require('./homePage');
-const expect = require('@playwright/test').expect;
+import { HomePage, manageWalletButton } from "./homePage";
 
+const expect = require("@playwright/test").expect;
 const inputName = '[name="name"]';
 const inputPassword = '[name="password"]';
 const inputconfirmPassword = '[name="confirm"]';
 const mnemonicText = '[class="TextArea_textarea__2a4Ez"]';
-const checkBox = '[class="Checkbox_track__2gz9s"]';
+const checkBox = '[class="Checkbox-module__track___6PRR3"]';
 const submitButton = '[type="submit"]';
 const mnemonicNumber = '[class="Form_label__bOv6h"]';
 
@@ -13,12 +13,7 @@ const mnemonicNumber = '[class="Form_label__bOv6h"]';
  * NewWalletPage extends HomePage and represents operations specific to the "New Wallet" page.
  */
 
-class NewWalletPage extends HomePage {
-  /**
-   * Constructor initializes a new instance of the NewWalletPage class
-   *
-   * @param {Object} browserContext - The browser context in which the page will operate
-   */
+export class NewWalletPage extends HomePage {
   constructor(browserContext) {
     super(browserContext);
     this.page = null;
@@ -32,12 +27,14 @@ class NewWalletPage extends HomePage {
   /**
    * Navigates to the "New Wallet" page and sets up a page instance for it
    */
-
   async createPage() {
-    const pagePromise = this.getPageWithUrlPart('auth/new');
-    await this.homePage.getByText('New wallet').click();
+    const pagePromise = this.getPageWithUrlPart("auth/new");
+    await this.homePage.getByTestId(this.manageWalletButton).click();
+    await this.homePage.getByTestId(this.addWalletButton).click();
+    await this.homePage.getByTestId(this.newWalletButton).click();
     this.page = await pagePromise;
     this.page.waitForURL();
+    this.page.reload();
   }
 
   /**
@@ -46,18 +43,16 @@ class NewWalletPage extends HomePage {
    * @param {string} walletName - Name for the new wallet
    * @param {string} password - Password for the new wallet (defaults to 'Testtest123!')
    */
-  async fillCreateWalletForm(walletName, password = 'Testtest123!') {
+  async createWallet(walletName, password = "Testtest123!") {
     await this.page.fill(createWalletElements.inputName, walletName);
-    await this.page.fill(createWalletElements.inputPassword, password);
-    await this.page.fill(createWalletElements.inputconfirmPassword, password);
-
     const mnemonicText = await this.page.textContent(
-      createWalletElements.mnemonicText,
+      createWalletElements.mnemonicText
     );
-    const arrayMnemonic = mnemonicText.split(' ');
+    const arrayMnemonic = mnemonicText.split(" ");
     await this.page.check(createWalletElements.checkBox);
     await this.page.click(createWalletElements.submitButton);
-    await this.page.waitForURL('**/new#2');
+
+    await this.page.waitForURL("**/new#2");
     const firtNumberString = await this.page
       .getByText(/\b([1-9]|1[0-9]|2[0-4])\w{0,2} word\b/)
       .first()
@@ -71,47 +66,23 @@ class NewWalletPage extends HomePage {
     const secondNumber = this.getNFromNthWord(secondNumberString);
 
     await this.page
-      .getByRole('button', { name: arrayMnemonic[firstNumber - 1] })
+      .getByRole("button", { name: arrayMnemonic[firstNumber - 1] })
       .first()
       .click();
     await this.page
-      .getByRole('button', { name: arrayMnemonic[secondNumber - 1] })
+      .getByRole("button", { name: arrayMnemonic[secondNumber - 1] })
       .last()
       .click();
     await this.page.click(createWalletElements.submitButton);
 
-    await this.page.waitForURL('**/new#3');
-    await expect(await this.page.getByTestId('DoneAllIcon')).toBeVisible();
+    await this.page.waitForURL("**/new#4");
     await expect(
-      this.page.getByRole('button', {
-        name: 'Connect',
+      this.page.getByRole("button", {
+        name: "Done",
         exact: true,
-      }),
+      })
     ).toBeVisible();
-    await this.page
-      .getByRole('button', { name: 'Connect', exact: true })
-      .click();
-
-    await expect(
-      await this.page.getByRole('button', {
-        name: walletName,
-      }),
-    ).toBeVisible();
-    await expect(await this.page.getByText('Portfolio value')).toBeVisible();
-    await expect(await this.page.getByText('Send')).toBeVisible();
-    await expect(await this.page.getByText('Receive')).toBeVisible();
-    await expect(await this.page.getByText('Buy')).toBeVisible();
-    await expect(await this.page.getByText('0').first()).toBeVisible();
-    await expect(
-      await this.page.getByText('.00', { exact: true }).first(),
-    ).toBeVisible();
-    await expect(
-      await this.page.getByText('LUNA', { exact: true }).first(),
-    ).toBeVisible();
-    await expect(await this.page.getByText('0').last()).toBeVisible();
-    await expect(
-      await this.page.getByText('.00', { exact: true }).last(),
-    ).toBeVisible();
+    await this.page.getByRole("button", { name: "Done", exact: true }).click();
   }
   /**
    * Extracts a number from an input string of format "Nth word"

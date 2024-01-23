@@ -91,10 +91,18 @@ export class HomePage {
   }
 
   async verifyElementsManageWalletsForm() {
-    await expect(await this.homePage.getByTestId(this.newWalletButton)).toBeVisible();
-    await expect(await this.homePage.getByTestId(this.importWalletButton)).toBeVisible();
-    await expect(await this.homePage.getByTestId(this.newMultiSigWalletButon)).toBeVisible();
-    await expect(await this.homePage.getByTestId(this.acceswithLedgerButton)).toBeVisible();
+    await expect(
+      await this.homePage.getByTestId(this.newWalletButton)
+    ).toBeVisible();
+    await expect(
+      await this.homePage.getByTestId(this.importWalletButton)
+    ).toBeVisible();
+    await expect(
+      await this.homePage.getByTestId(this.newMultiSigWalletButon)
+    ).toBeVisible();
+    await expect(
+      await this.homePage.getByTestId(this.acceswithLedgerButton)
+    ).toBeVisible();
   }
 
   async verifyElements(walletName = null) {
@@ -121,11 +129,13 @@ export class HomePage {
     ).toBeVisible();
   }
 
-  async verifyWallet(walletName){
-    await this.homePage.bringToFront()
-    await this.homePage.getByTestId(this.manageWalletButton).click()
-    await expect(this.homePage.getByRole('heading', { name: walletName })).toBeVisible();
-    await this.homePage.getByRole('heading', { name: walletName }).click()
+  async verifyWallet(walletName) {
+    await this.homePage.bringToFront();
+    await this.homePage.getByTestId(this.manageWalletButton).click();
+    await expect(
+      this.homePage.getByRole("heading", { name: walletName })
+    ).toBeVisible();
+    await this.homePage.getByRole("heading", { name: walletName }).click();
   }
 
   async enterPassword(password = "Testtest123!") {
@@ -220,9 +230,9 @@ export class HomePage {
    * @param {boolean} enabled Whether or not the Submit button is expected
    * to be enabled.
    */
-  async userSubmit(enabled = true, page = this.homePage) {
+  async userSubmit(enabled = true, page = this.homePage, name = "Submit") {
     const submitButton = await page.getByRole("button", {
-      name: "Submit",
+      name: name,
     });
 
     if (enabled) {

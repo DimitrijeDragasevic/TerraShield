@@ -126,9 +126,9 @@ export class HomePage {
       const name = await this.homePage
         .locator(`[data-testid="${this.manageWalletButton}"]`)
         .textContent();
-      if (walletName !== name) {
+      if (walletName !== name.trim()) {
         throw new Error(
-          `Wallet name does not match the assigned, \ntest wallet name : "${walletName}" \nname:"${name}" `
+          `Wallet name does not match the assigned, \ntest wallet name : "${walletName}"\nname:"${name}" `
         );
       }
     }
@@ -138,8 +138,10 @@ export class HomePage {
   }
 
   async verifyWallet(walletName){
+    await this.homePage.bringToFront()
     await this.homePage.getByTestId(this.manageWalletButton).click()
-    await this.homePage.pause();
+    await expect(this.homePage.getByRole('heading', { name: walletName })).toBeVisible();
+    await this.homePage.getByRole('heading', { name: walletName }).click()
   }
 
   async enterPassword(password = "Testtest123!") {

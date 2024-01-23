@@ -8,6 +8,6 @@ test.beforeEach(async ({ seedPage, homePage }) => {
 
 test("Create wallet", async ({ newWalletPage, homePage }) => {
   await newWalletPage.createWallet("Test wallet 3");
-  await homePage.verifyWallet()
+  await homePage.verifyWallet("Test wallet 3");
   await homePage.verifyElements("Test wallet 3");
 });

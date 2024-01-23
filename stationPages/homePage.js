@@ -90,27 +90,11 @@ export class HomePage {
     });
   }
 
-  async getButtonByText(page, text) {
-    return await page.getByRole("button", { name: text, exact: true });
-  }
-
   async verifyElementsManageWalletsForm() {
-    await expect(await this.homePage.getByText("Manage Wallets")).toBeVisible();
-    await expect(
-      await this.getButtonByText(this.homePage, "New wallet")
-    ).toBeVisible();
-    await expect(
-      await this.getButtonByText(this.homePage, "Import from seed phrase")
-    ).toBeVisible();
-    await expect(
-      await this.getButtonByText(this.homePage, "Import from private key")
-    ).toBeVisible();
-    await expect(
-      await this.getButtonByText(this.homePage, "New multisig wallet")
-    ).toBeVisible();
-    await expect(
-      await this.getButtonByText(this.homePage, "Access with ledger")
-    ).toBeVisible();
+    await expect(await this.homePage.getByTestId(this.newWalletButton)).toBeVisible();
+    await expect(await this.homePage.getByTestId(this.importWalletButton)).toBeVisible();
+    await expect(await this.homePage.getByTestId(this.newMultiSigWalletButon)).toBeVisible();
+    await expect(await this.homePage.getByTestId(this.acceswithLedgerButton)).toBeVisible();
   }
 
   async verifyElements(walletName = null) {
@@ -165,10 +149,8 @@ export class HomePage {
 
   async goToManageWalletsMenuFromHome() {
     await this.homePage.bringToFront();
-    await this.homePage.reload();
-    await this.expectButton("Test wallet 1", "name");
-    await expect(await this.homePage.getByText("Manage Wallets")).toBeVisible();
-    await this.homePage.getByRole("button", { name: "Add a wallet" }).click();
+    await this.homePage.getByTestId(this.manageWalletButton).click();
+    await this.homePage.getByTestId(this.addWalletButton).click();
   }
   /**
    * A function to expect and click a button if specified to test functionality.

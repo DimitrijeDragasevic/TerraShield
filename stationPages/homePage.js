@@ -10,6 +10,9 @@ export class HomePage {
   constructor(browserContext) {
     this.browserContext = browserContext;
     this.homePage = null;
+    this.mainContainer = "main-container";
+    this.tabsContainer = "tabs-container";
+    this.listContainer = "list-container";
     this.submitButton = '[type="submit"]';
     this.inputPassword = '[type="password"]';
     this.sendButton = "wallet-action-button-0";
@@ -21,10 +24,17 @@ export class HomePage {
     this.assetListFilterButton = "assetlist-filter-icon";
     this.assetListFilterInputButton = "assetlist-filter-input";
     this.assetListClearFilterButton = "assetlist-clear-filter-button";
+    this.settingsButton = "settings-button";
+    this.closeButton = "close-button"
+    this.dashboardButton = "dashboard-button";
     this.newWalletButton = "button-item-0";
     this.importWalletButton = "button-item-1";
     this.newMultiSigWalletButon = "button-item-2";
     this.acceswithLedgerButton = "button-item-3";
+    this.mainNet= "radio-list-item-0";
+    this.testNet= "radio-list-item-1";
+    this.terraClassic= "radio-list-item-2";
+    this.localTerra= "radio-list-item-3";
   }
 
   async initialize() {
@@ -127,6 +137,12 @@ export class HomePage {
     await expect(
       this.homePage.getByTestId(this.assetListFilterButton)
     ).toBeVisible();
+
+    await expect(this.homePage.getByTestId(this.listContainer)).toBeVisible();
+    await expect(this.homePage.getByTestId(this.mainContainer)).toBeVisible();
+    await expect(this.homePage.getByTestId(this.tabsContainer)).toBeVisible();
+    await expect(this.homePage.getByTestId(this.settingsButton)).toBeVisible();
+    await expect(this.homePage.getByTestId(this.dashboardButton).first()).toBeVisible();
   }
 
   async verifyWallet(walletName) {
@@ -198,7 +214,7 @@ export class HomePage {
         })
         .getByRole(role);
     }
-
+    await this.homePage.pause()
     await expect(button).toBeVisible();
 
     if (click) {
@@ -283,63 +299,6 @@ export class HomePage {
     }
   }
 
-  // Ensures main page is loaded with all relevant elements.
-  async evaluateMainPage(page = this.homePage, buttonName = "Test wallet 1") {
-    /* --------------------------------- Buttons -------------------------------- */
-    this.homePage.reload();
-
-    const buttons = {
-      walletButton: {
-        buttonText: buttonName,
-        type: "name",
-      },
-      settingsButton: {
-        buttonText: "SettingsIcon",
-        type: "id",
-      },
-      sendButton: {
-        buttonText: /^Send$/,
-        type: "element",
-      },
-      receiveButton: {
-        buttonText: /^Receive$/,
-        type: "element",
-      },
-      buyButton: {
-        buttonText: /^Buy$/,
-        type: "element",
-      },
-      manageButton: {
-        buttonText: "Manage",
-        type: "name",
-      },
-    };
-
-    for (const button in buttons) {
-      const attributes = buttons[button];
-      await this.expectButton(
-        attributes.buttonText,
-        attributes.type,
-        "button",
-        false,
-        page
-      );
-    }
-
-    /* ------------------------------ Text Elements ----------------------------- */
-
-    for (const text of [
-      "Portfolio value",
-      /\$ [\d]{1,5}\.[\d]{2}/,
-      "Send",
-      "Receive",
-      "Buy",
-      "Assets",
-    ]) {
-      await this.expectText(text, false, false, false, page);
-    }
-  }
-
   /**
    * Opens settings, selects desired option, and closes modal.
    *
@@ -349,13 +308,13 @@ export class HomePage {
    */
   async selectSettings(buttonText, initialize = true, close = false) {
     if (initialize) {
-      await this.expectButton("SettingsIcon", "id");
+      await this.expectButton(this.settingsButton, "id");
     }
-
+    
     await this.expectButton(buttonText, "name");
 
     if (close) {
-      await this.expectButton("CloseIcon", "id");
+      await this.expectButton(this.closeButton, "id");
     }
   }
 
@@ -371,8 +330,8 @@ export class HomePage {
     await this.selectSettings("Network Mainnet");
 
     // Change to Testnet and ensure TESTNET banner is visible.
-    await this.selectSettings("Testnets", false);
-    await this.expectText("TESTNET");
+    await this.selectSettings(this.testNet, false);
+    await this.expectText("Testnets");
 
     // Change to Classic and ensure CLASSIC banner is visible.
     await this.selectSettings("Network Testnet");

@@ -101,6 +101,7 @@ export class HomePage {
   }
 
   async verifyElementsManageWalletsForm() {
+    await this.homePage.getByTestId(this.addWalletButton).click()
     await expect(
       await this.homePage.getByTestId(this.newWalletButton)
     ).toBeVisible();
@@ -173,10 +174,10 @@ export class HomePage {
     await this.homePage.getByRole("button", { name: "Post" }).click();
   }
 
-  async goToManageWalletsMenuFromHome() {
+  async goToManageWalletsMenu() {
+    await this.homePage.reload();
     await this.homePage.bringToFront();
     await this.homePage.getByTestId(this.manageWalletButton).click();
-    await this.homePage.getByTestId(this.addWalletButton).click();
   }
   /**
    * A function to expect and click a button if specified to test functionality.

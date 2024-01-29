@@ -1,16 +1,14 @@
 // @ts-check
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config();
 const path = require("path");
 const { defineConfig, devices, expect, chromium } = require("@playwright/test");
 const base = require("@playwright/test");
-import {PageFactory} from './stationPages/pageFactory'
-
+import { PageFactory } from "./stationPages/pageFactory";
 
 const test = base.test.extend({
   context: async ({}, use) => {
-    const pathToExtension =
-      "/Users/dimitrijedragasevic/Desktop/projects/station-wallet/station-extension/build";
+    const pathToExtension = process.env.STATION_PATH;
     const context = await chromium.launchPersistentContext("", {
       headless: false,
       args: [
@@ -28,9 +26,13 @@ const test = base.test.extend({
     const pageFactory = new PageFactory(context);
     await use(pageFactory);
   },
-  seedPage: async ({ pageFactory }, use) => {
-    const seedPage = await pageFactory.createPage("seed");
-    await use(seedPage);
+  authPage: async ({ pageFactory }, use) => {
+    const authPage = await pageFactory.createPage("auth");
+    await use(authPage);
+  },
+  entryPage: async ({ pageFactory }, use) => {
+    const entryPage = await pageFactory.createPage("entry");
+    await use(entryPage);
   },
   newWalletPage: async ({ pageFactory }, use) => {
     const newWalletPage = await pageFactory.createPage("newWallet");
@@ -44,13 +46,9 @@ const test = base.test.extend({
     const ledgerPage = await pageFactory.createPage("ledger");
     await use(ledgerPage);
   },
-  homePage: async ({ pageFactory }, use) => {  
+  homePage: async ({ pageFactory }, use) => {
     const homePage = await pageFactory.createPage("home");
     await use(homePage);
-  },
-  privateKeyPage: async ({ pageFactory }, use) => {
-    const privateKeyPage = await pageFactory.createPage("privateKey");
-    await use(privateKeyPage);
   },
 });
 

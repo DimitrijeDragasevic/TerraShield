@@ -1,11 +1,11 @@
-const { NewWalletPage } = require('./newWalletPage');
-const { SeedPage } = require('./seedPage');
-const MultiSigPage = require('./multiSigPage');
-const LedgerPage = require('./ledgerPage');
-const HomePage = require('./homePage');
-const PrivateKeyPage = require('./privateKeyPage');
+import { HomePage } from "./homePage";
+import { NewWalletPage } from "./newWalletPage";
+import { AuthPage } from "./authPage";
+import { EntryPage } from "./entryPage";
+import { MultiSigPage } from "./multiSigPage";
+import { LedgerPage } from "./ledgerPage";
 
-class PageFactory {
+export class PageFactory {
   constructor(browserContext) {
     this.browserContext = browserContext;
     this.pageRegistry = {}; // Cache of created pages
@@ -19,26 +19,26 @@ class PageFactory {
 
     let pageInstance;
     switch (type) {
-      case 'newWallet':
+      case "newWallet":
         pageInstance = new NewWalletPage(this.browserContext);
         break;
-      case 'seed':
-        pageInstance = new SeedPage(this.browserContext);
+      case "auth":
+        pageInstance = new AuthPage(this.browserContext);
         break;
-      case 'multi':
+      case "entry":
+        pageInstance = new EntryPage(this.browserContext);
+        break;
+      case "multi":
         pageInstance = new MultiSigPage(this.browserContext);
         break;
-      case 'ledger':
+      case "ledger":
         pageInstance = new LedgerPage(this.browserContext);
         break;
-      case 'home':
+      case "home":
         pageInstance = new HomePage(this.browserContext);
         break;
-      case 'privateKey':
-        pageInstance = new PrivateKeyPage(this.browserContext);
-        break;
       default:
-        throw new Error('Invalid page type');
+        throw new Error("Invalid page type");
     }
     await pageInstance.initialize();
     this.pageRegistry[type] = pageInstance; // Cache the created page
@@ -46,4 +46,4 @@ class PageFactory {
   }
 }
 
-module.exports = PageFactory;
+// module.exports = PageFactory;

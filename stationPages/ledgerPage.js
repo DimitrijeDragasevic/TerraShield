@@ -1,11 +1,11 @@
-const HomePage = require('./homePage');
+import { HomePage } from './homePage';
 
 /**
  * Represents the LedgerPage, a specialized type of HomePage where users can access using a ledger.
  * It provides functionalities to initialize and navigate to the ledger access page.
  */
 
-class LedgerPage extends HomePage {
+export class LedgerPage extends HomePage {
   /**
    * Constructor initializes a new instance of the LedgerPage class.
    * @param {Object} browserContext - The browser context in which the page operates.
@@ -32,5 +32,3 @@ class LedgerPage extends HomePage {
     this.page = await pagePromise;
   }
 }
-
-module.exports = LedgerPage;

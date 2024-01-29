@@ -1,19 +1,19 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 const { test, expect } = require("../../playwright.config");
 const randomstring = require("randomstring");
 dotenv.config();
 
-test.beforeEach(async ({ seedPage, homePage }) => {
-  await seedPage.fillSeedForm("Test wallet 1", "Testtest123!");
-  await seedPage.verifyFirstWalletAdded();
-  const TESTNET = process.env.IS_TESTNET === 'true';
+test.beforeEach(async ({ authPage, homePage }) => {
+  await authPage.fillSeedForm("Test wallet 1", "Testtest123!");
+  await authPage.verifyFirstWalletAdded();
+  const TESTNET = process.env.IS_TESTNET === "true";
   if (TESTNET) {
-      await homePage.switchNetwork("Testnet");
+    await homePage.switchNetwork("Testnet");
   }
 });
 
 test("Create a Token DAO", async ({ page, homePage }) => {
-  test.slow()
+  test.slow();
   const randomString = randomstring.generate(5) + "Token_QA_test";
 
   await page.goto("/");
@@ -96,9 +96,11 @@ test("Create a Token DAO", async ({ page, homePage }) => {
   await page.waitForTimeout(10000);
 
   // Verify the creation was successful
-  await expect(page.getByRole("heading", { name: randomString })).toBeVisible({timeout: 10000});
+  await expect(page.getByRole("heading", { name: randomString })).toBeVisible({
+    timeout: 10000,
+  });
 
-  console.log(`This is the url of the created DAO: ${page.url()}`)
+  console.log(`This is the url of the created DAO: ${page.url()}`);
 });
 
 test("Create a NFT DAO", async ({ page, homePage }) => {
@@ -146,9 +148,11 @@ test("Create a NFT DAO", async ({ page, homePage }) => {
 
   //Wait for the dao page to load
   await page.waitForTimeout(10000);
-  await expect(page.getByRole("heading", { name: randomString })).toBeVisible({timeout: 10000});
+  await expect(page.getByRole("heading", { name: randomString })).toBeVisible({
+    timeout: 10000,
+  });
 
-  console.log(`This is the url of the created DAO: ${page.url()}`)
+  console.log(`This is the url of the created DAO: ${page.url()}`);
 });
 
 test("Create a MultiSig DAO", async ({ page, homePage }) => {
@@ -174,10 +178,10 @@ test("Create a MultiSig DAO", async ({ page, homePage }) => {
       "https://www.madness-toys.store/cdn/shop/files/LOGO_FOR_STORE-removebg-preview.png?v=1683580793&width=80"
     );
   await page
-    .getByPlaceholder("Describe your DAO in 280 characters or less.")
+    .getByPlaceholder("Describe your DAO in 560 characters or less.")
     .click();
   await page
-    .getByPlaceholder("Describe your DAO in 280 characters or less.")
+    .getByPlaceholder("Describe your DAO in 560 characters or less.")
     .fill("test");
   await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Next" }).click();
@@ -198,7 +202,9 @@ test("Create a MultiSig DAO", async ({ page, homePage }) => {
   await page.bringToFront();
   await page.waitForTimeout(10000);
   // Verify the creation was successful
-  await expect(page.getByRole("heading", { name: randomString })).toBeVisible({timeout: 10000});
+  await expect(page.getByRole("heading", { name: randomString })).toBeVisible({
+    timeout: 10000,
+  });
 
-  console.log(`This is the url of the created DAO: ${page.url()}`)
+  console.log(`This is the url of the created DAO: ${page.url()}`);
 });

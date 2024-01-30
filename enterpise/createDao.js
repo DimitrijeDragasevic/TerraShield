@@ -1,79 +1,23 @@
 const expect = require("@playwright/test").expect;
 
-async function createMultisigDAO(page, homePage, name) {
-  await page.goto("/");
-  await page
-    .locator("div")
-    .filter({ hasText: /^DashboardConnect wallet$/ })
-    .getByRole("button")
-    .click();
-  await page.getByRole("button", { name: "Station Wallet" }).click();
-  await homePage.connectWallet();
-  await page.bringToFront();
-
-  await page.getByRole("link", { name: "Create DAO" }).click();
-  await page.getByText("Token DAO").click();
-  await page.getByRole("button", { name: "Next" }).click();
-
-  // Fill out the DAO creation form
-  await page.getByPlaceholder("Enter a name for your DAO").fill(name);
-  await page
-    .getByPlaceholder("Enter the URL of your DAO's logo")
-    .fill("https://station.money/static/media/favicon.1e08d51d.svg");
-
-  await page.getByLabel("Description0 / 560").fill("test");
-
-  await page.getByRole("button", { name: "Next" }).click();
-  await page.getByText("Yes, find my Token").click();
-  await page.getByPlaceholder("Search for an asset").fill("LUNA");
-  await page
-    .locator("div")
-    .filter({ hasText: /^LUNATerra Luna$/ })
-    .nth(1)
-    .click();
-  await page.getByRole("button", { name: "Next" }).click();
-
-  await daoGovernance(page);
-
-  await councilMembers(page, "terra1u28fgu0p99eh9xc4623k6cw6qmfdnl9un23yxs");
-
-  await createTreasuryOutposts(
-    page,
-    "Migaloo",
-    "Neutron",
-    "Juno",
-    "Osmosis",
-    "Stargaze"
-  );
-
-  await socialMediaLinks("test","test","test","test")
-  await page.pause();
-  await page.getByRole("button", { name: "Next" }).click();
-
-  //Create Treasury Outposts
-
-  await page.getByRole("button", { name: "Next" }).click();
-
-  //Social media links
-
-  await page.getByRole("button", { name: "Next" }).click();
-
-  // Create Token Dao final page
-
-  await page.getByRole("button", { name: "Next" }).click();
-
-  await expect(page.getByText("Create Token DAO")).toBeVisible();
-}
-
-async function daoGovernance(page, minimumDeposit = "10", minimumWeight = "1") {
+async function daoGovernance(
+  page,
+  multisig = true,
+  minimumDeposit = "10",
+  minimumWeight = "1"
+) {
   await expect(page.getByText("7 days")).toBeVisible();
   await expect(page.getByText("30%")).toBeVisible();
   await expect(page.getByText("51%").first()).toBeVisible();
   await expect(page.getByText("51%").last()).toBeVisible();
-  await expect(page.getByText("14 days")).toBeVisible();
-  await page
-    .getByPlaceholder("Enter a minimum deposit amount")
-    .fill(minimumDeposit);
+
+  if (!multisig) {
+    await page
+      .getByPlaceholder("Enter a minimum deposit amount")
+      .fill(minimumDeposit);
+    await expect(page.getByText("14 days")).toBeVisible();
+  }
+
   await page.getByPlaceholder("Enter minimum weight").fill(minimumWeight);
   await page.getByRole("button", { name: "Next" }).click();
 }
@@ -109,7 +53,6 @@ async function councilMembers(page, walletAddress) {
   await expect(page.getByText("No options left")).toBeVisible();
   await page.getByRole("button", { name: "Next" }).click();
 }
-
 //'Migaloo', 'Neutron', 'Juno', 'Osmosis', 'Stargaze'
 async function createTreasuryOutposts(page, ...treasury) {
   for (const chain of treasury) {
@@ -118,7 +61,7 @@ async function createTreasuryOutposts(page, ...treasury) {
   await page.getByRole("button", { name: "Next" }).click();
 }
 
-async function socialMediaLinks(twitter, github, discord, telegram) {
+async function socialMediaLinks(page, twitter, github, discord, telegram) {
   await page.getByPlaceholder("Enter Twitter username").fill(twitter);
   await page.getByPlaceholder("Enter GitHub username").fill(github);
   await page.getByPlaceholder("Enter Discord username").fill(discord);
@@ -126,6 +69,137 @@ async function socialMediaLinks(twitter, github, discord, telegram) {
   await page.getByRole("button", { name: "Next" }).click();
 }
 
-async function createTokenDaoSummary() {}
+async function verifyAndCreateTokenDaoSummary(page) {
+  //I need to add test ids to to verify the created data 100%
+  await expect(page.getByText("Step 8")).toBeVisible();
+  await expect(page.getByText("Create Token DAO")).toBeVisible();
+  await expect(page.getByText("Review configuration")).toBeVisible();
 
-export default createMultisigDAO;
+  await page.getByRole("button", { name: "Next" }).click();
+}
+
+async function newMultiSig(page, ...address) {
+  await page.getByText("No, create a new Multisig").click();
+  await page.getByRole("button", { name: "Next" }).click();
+
+  // Check if there is at least one address to process
+  if (address.length > 0) {
+    // Fill the first address field (index 1) with the first element in the address array
+    await page.locator('input[name="members.1.address"]').fill(address[0]);
+
+    // Loop through the rest of the addresses starting from the second element
+    for (let i = 1; i < address.length; i++) {
+      // Click the "Add" button to create a new address field
+      await page.getByRole("button", { name: "Add" }).click();
+
+      // Fill the newly created address field
+      // Increment the index by 1 because the form field index starts at 1
+      await page
+        .locator(`input[name="members.${i + 1}.address"]`)
+        .fill(address[i]);
+    }
+  }
+  await page.getByRole("button", { name: "Next" }).click();
+}
+
+// Function to create a Token DAO
+export async function createTokenDAO(page, name) {
+  await navigateToCreateDAO(page, "Token DAO");
+  await fillDAOForm(
+    page,
+    name,
+    "https://station.money/static/media/favicon.1e08d51d.svg",
+    "test"
+  );
+  await selectAsset(page, "LUNA", /^LUNATerra Luna$/);
+  await completeDAOSetup(
+    false,
+    page,
+    "Migaloo",
+    "Neutron",
+    "Juno",
+    "Osmosis",
+    "Stargaze"
+  );
+  await verifyAndCreateTokenDaoSummary(page);
+}
+
+async function verifyAndCreateMultiSigDaoSummary(page) {
+  // //I need to add test ids to to verify the created data 100%
+  await expect(page.getByText("Step 9")).toBeVisible();
+  await expect(page.getByText("Create Multisig DAO")).toBeVisible();
+  await expect(page.getByText("Review configuration")).toBeVisible();
+
+  // Navigate to the next step
+  await page.getByRole("button", { name: "Next" }).click();
+}
+
+// Function to create a Multisig DAO
+export async function createMultiSigDao(page, daoName) {
+  await navigateToCreateDAO(page, "Multisig DAO");
+  await fillDAOForm(
+    page,
+    daoName,
+    "https://www.madness-toys.store/logo.png",
+    "test"
+  );
+  await handleMultiSigSetup(
+    page,
+    true,
+    "terra10detxcnq49r3nnze7zuqprl7yqdh34fulqtakw",
+    "terra1puh783ttdt6sxj6u9ckx20f644chn04cygdqgw"
+  );
+  await completeDAOSetup(
+    true,
+    page,
+    "Migaloo",
+    "Neutron",
+    "Juno",
+    "Osmosis",
+    "Stargaze"
+  );
+  await verifyAndCreateMultiSigDaoSummary(page);
+}
+
+// Function to navigate to the Create DAO page and select DAO type
+async function navigateToCreateDAO(page, daoType) {
+  await page.getByRole("link", { name: "Create DAO" }).click();
+  await page.getByText(daoType).click();
+  await page.getByRole("button", { name: "Next" }).click();
+}
+
+// Function to fill in the DAO creation form
+async function fillDAOForm(page, name, logoUrl, description) {
+  await page.getByPlaceholder("Enter a name for your DAO").fill(name);
+  await page.getByPlaceholder("Enter the URL of your DAO's logo").fill(logoUrl);
+  await page.getByLabel("Description0 / 560").fill(description);
+  await page.getByRole("button", { name: "Next" }).click();
+}
+
+// Function to select an asset
+async function selectAsset(page, assetName, assetSelector) {
+  await page.getByText("Yes, find my Token").click();
+  await page.getByPlaceholder("Search for an asset").fill(assetName);
+  await page.locator("div").filter({ hasText: assetSelector }).nth(1).click();
+  await page.getByRole("button", { name: "Next" }).click();
+}
+
+// Function to complete the setup of DAO
+async function completeDAOSetup(multisig, page, ...treasuryOutposts) {
+  await daoGovernance(page, multisig);
+  await councilMembers(page, "terra1u28fgu0p99eh9xc4623k6cw6qmfdnl9un23yxs");
+  await createTreasuryOutposts(page, ...treasuryOutposts);
+  await socialMediaLinks(page, "test", "test", "test", "test");
+}
+
+// Function to handle Multisig setup
+async function handleMultiSigSetup(page, hasMultiSig, ...addresses) {
+  await expect(
+    page.getByText("Do you have an existing Multisig?")
+  ).toBeVisible();
+  if (hasMultiSig) {
+    await newMultiSig(page, ...addresses);
+  } else {
+    // Handle the case when there is no existing multisig (BUG)
+  }
+}

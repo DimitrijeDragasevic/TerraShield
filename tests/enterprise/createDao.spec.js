@@ -72,6 +72,26 @@ test("Create a Token DAO", async ({ page, homePage }) => {
   console.log(`This is the url of the created token DAO: ${page.url()}`);
 });
 
+/**
+ * Test: Create a NFT DAO
+ *
+ * Purpose:
+ * This test automates the process of creating a NFT DAO in a web application.
+ * It handles the user journey from the initial wallet connection to the final creation step of a NFT DAO.
+ *
+ * Test Flow:
+ * 1. Navigate to the home page of the application.
+ * 2. Locate and click the button to connect a wallet, targeting 'Station Wallet'.
+ * 3. Utilize the `homePage` object's method to facilitate the wallet connection.
+ * 4. Bring the main testing page to focus.
+ * 5. Generate a unique NFT DAO name using the current date and time.
+ * 6. Execute the `createNftDAO` function to carry out the DAO creation process.
+ * 7. Approve the transaction necessary for the DAO creation.
+ * 8. Wait for the necessary time to allow for transaction processing.
+ * 9. Confirm the DAO's successful creation by checking for a heading with the unique DAO name.
+ *
+ * This test ensures the correct functionality of the NFT DAO creation process, including wallet connection and transaction approval.
+ */
 test("Create a NFT DAO", async ({ page, homePage }) => {
   test.slow();
 
@@ -106,6 +126,26 @@ test("Create a NFT DAO", async ({ page, homePage }) => {
   console.log(`This is the url of the created DAO: ${page.url()}`);
 });
 
+/**
+ * Test: Create a MultiSig DAO
+ *
+ * Purpose:
+ * This test is designed to automate the creation of a MultiSig DAO in the application.
+ * It encompasses the steps involved in connecting a wallet and completing the MultiSig DAO setup.
+ *
+ * Test Flow:
+ * 1. Start by visiting the home page of the application.
+ * 2. Identify and activate the wallet connection button, focusing on 'Station Wallet'.
+ * 3. Leverage the `homePage` object to manage the wallet connection.
+ * 4. Refocus on the primary testing page.
+ * 5. Formulate a unique MultiSig DAO name with the current ISO date and time.
+ * 6. Invoke `createMultiSigDao` function to initialize and finish the DAO setup.
+ * 7. Validate the transaction essential for establishing the DAO.
+ * 8. Allow a pause to ensure the processing of the transaction.
+ * 9. Validate the successful establishment of the DAO by verifying the presence of a heading with the DAO's name.
+ *
+ * This test validates the effective operation of the MultiSig DAO creation feature, including the processes of wallet connection and transaction confirmation.
+ */
 test("Create a MultiSig DAO", async ({ page, homePage }) => {
   test.slow();
   const now = new Date();

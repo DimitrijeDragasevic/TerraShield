@@ -78,6 +78,14 @@ async function verifyAndCreateTokenDaoSummary(page) {
   await page.getByRole("button", { name: "Next" }).click();
 }
 
+async function verifyAndCreateNFTDaoSummary(page) {
+  //I need to add test ids to to verify the created data 100%
+  await expect(page.getByText("Step 9")).toBeVisible();
+  await expect(page.getByText("Create NFT DAO")).toBeVisible();
+  await expect(page.getByText("Review configuration")).toBeVisible();
+  await page.getByRole("button", { name: "Next" }).click();
+}
+
 async function newMultiSig(page, ...address) {
   await page.getByText("No, create a new Multisig").click();
   await page.getByRole("button", { name: "Next" }).click();
@@ -134,6 +142,48 @@ async function verifyAndCreateMultiSigDaoSummary(page) {
   await page.getByRole("button", { name: "Next" }).click();
 }
 
+export async function createNftDAO(page, daoName, haveNft, CW271address) {
+  await navigateToCreateDAO(page, "NFT DAO");
+  await fillDAOForm(
+    page,
+    daoName,
+    "https://www.madness-toys.store/logo.png",
+    "test"
+  );
+  await doYouHaveAnExistingNFT(page, haveNft, CW271address);
+  await completeDAOSetup(
+    true,
+    page,
+    "Migaloo",
+    "Neutron",
+    "Juno",
+    "Osmosis",
+    "Stargaze"
+  );
+  await verifyAndCreateNFTDaoSummary(page);
+}
+
+async function fillNftForm(page) {
+  await page.getByPlaceholder("Enter the name of your NFT").fill("test123");
+  await page.getByPlaceholder("Enter the symbol of your NFT").fill("test");
+  await page.getByRole("button", { name: "Next" }).click();
+}
+
+async function doYouHaveAnExistingNFT(page, haveNft, CW271address) {
+  if (!haveNft) {
+    await page.getByText("No, create a new NFT").click();
+    await page.getByRole("button", { name: "Next" }).click();
+    await fillNftForm(page);
+  } else {
+    await page.getByText("Yes, find my NFT").click();
+    await page
+      .locator("label")
+      .filter({ hasText: /^Yes, find my NFT$/ })
+      .fill(CW271address);
+    await page.getByRole("button", { name: "Next" }).click();
+  }
+}
+
 // Function to create a Multisig DAO
 export async function createMultiSigDao(page, daoName) {
   await navigateToCreateDAO(page, "Multisig DAO");
@@ -143,12 +193,14 @@ export async function createMultiSigDao(page, daoName) {
     "https://www.madness-toys.store/logo.png",
     "test"
   );
+
   await handleMultiSigSetup(
     page,
     true,
     "terra10detxcnq49r3nnze7zuqprl7yqdh34fulqtakw",
     "terra1puh783ttdt6sxj6u9ckx20f644chn04cygdqgw"
   );
+
   await completeDAOSetup(
     true,
     page,

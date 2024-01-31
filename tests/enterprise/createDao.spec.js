@@ -62,9 +62,7 @@ test("Create a Token DAO", async ({ page, homePage }) => {
   await homePage.approveTransaction();
 
   await page.bringToFront();
-  await page.waitForTimeout(10000);
 
-  // Verify the creation was successful
   await expect(page.getByRole("heading", { name: daoName })).toBeVisible({
     timeout: 100000,
   });
@@ -117,8 +115,6 @@ test("Create a NFT DAO", async ({ page, homePage }) => {
   await homePage.approveTransaction();
   await page.bringToFront();
 
-  //Wait for the dao page to load
-  await page.waitForTimeout(10000);
   await expect(page.getByRole("heading", { name: daoName })).toBeVisible({
     timeout: 100000,
   });
@@ -168,7 +164,6 @@ test("Create a MultiSig DAO", async ({ page, homePage }) => {
   await homePage.approveTransaction();
 
   await page.bringToFront();
-  await page.waitForTimeout(10000);
 
   await expect(page.getByRole("heading", { name: daoName })).toBeVisible({
     timeout: 100000,

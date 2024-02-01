@@ -1,8 +1,9 @@
-const { test, expect } = require("../../playwright.config");
+import { test, expect } from "../../playwright.config";
 
-test.beforeEach(async ({ authPage }) => {
-  await authPage.fillSeedForm("Test wallet 1", "Testtest123!");
-  await authPage.verifyFirstWalletAdded();
+test.beforeEach(async ({ entryPage, homePage }) => {
+  await entryPage.fillPhraseForm("Test wallet 1", "Testtest123!");
+  await homePage.enterPassword();
+  await homePage.verifyElements("Test wallet 1");
 });
 
 test("Verify home page elements", async ({ page, homePage }) => {

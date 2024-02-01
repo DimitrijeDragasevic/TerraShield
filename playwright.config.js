@@ -1,12 +1,11 @@
 // @ts-check
 import dotenv from "dotenv";
-dotenv.config();
-const path = require("path");
-const { defineConfig, devices, expect, chromium } = require("@playwright/test");
-const base = require("@playwright/test");
+import { defineConfig, devices, expect, chromium, test as baseTest } from "@playwright/test";
 import { PageFactory } from "./stationPages/pageFactory";
 
-const test = base.test.extend({
+dotenv.config();
+
+const test = baseTest.extend({
   context: async ({}, use) => {
     const pathToExtension = process.env.STATION_PATH;
     const context = await chromium.launchPersistentContext("", {
@@ -83,7 +82,7 @@ const config = defineConfig({
   ],
 });
 
-module.exports = {
+export {
   test,
   expect,
   config,

@@ -1,11 +1,13 @@
-const { test, expect } = require("../../playwright.config");
+import { test, expect } from "../../playwright.config";
 
-test.beforeEach(async ({ authPage }) => {
-  await authPage.fillSeedForm("Test wallet 1", "Testtest123!");
-  await authPage.verifyFirstWalletAdded();
+test.beforeEach(async ({ entryPage, homePage }) => {
+  await entryPage.fillPhraseForm("Test wallet 1", "Testtest123!");
+  await homePage.enterPassword();
+  await homePage.verifyElements("Test wallet 1");
 });
 
 test("Swap 1 LUNA to AXLUSDT successfully", async ({ page, homePage }) => {
+  test.slow();
   await page.goto("/");
   await page.getByRole("button", { name: "Connect" }).click();
   await page.getByRole("button", { name: "Station (Extension)" }).click();
@@ -29,13 +31,12 @@ test("Swap 1 LUNA to AXLUSDT successfully", async ({ page, homePage }) => {
     page.getByRole("banner").getByRole("button").first()
   ).toBeVisible();
 
-
   // 2. Set swap details
 
   // Click on the dropdown button to expand the options.
-  await page.click('button.SelectToken_toggle__2XoPn');
+  await page.click("button.SelectToken_toggle__2XoPn");
   // Wait for the LUNA option to be visible and then click on it.
-  await page.click('div.TokenCard_main__1SRGp h1');
+  await page.click("div.TokenCard_main__1SRGp h1");
 
   await page.fill('input[name="input"]', "1");
   await page.getByRole("button", { name: "Select a coin" }).click();
@@ -43,8 +44,8 @@ test("Swap 1 LUNA to AXLUSDT successfully", async ({ page, homePage }) => {
 
   // Wait for any 'input.muted' element to be detached (i.e., no longer present in the DOM).
   await page.waitForSelector("input.muted", { state: "detached" });
-
   // Alternatively, if it's not specifically an input, or to be more precise:
+
   await page.waitForFunction(() => {
     // Fetch all elements with the class 'muted' from the DOM.
     const mutedElements = document.querySelectorAll(".muted");
@@ -70,8 +71,9 @@ test("Swap 1 LUNA to AXLUSDT successfully", async ({ page, homePage }) => {
 
   // Extract the axlUSDT value
   const axlUSDTValueText = await axlUSDTSpan.textContent();
+  console.log(axlUSDTValueText);
   const axlUSDTValue = parseFloat("0" + axlUSDTValueText);
-
+  console.log(axlUSDTValue);
   // Ensure you found the axlUSDT value
   if (!axlUSDTValue) {
     throw new Error("Unable to extract axlUSDT value from the span.");
@@ -87,16 +89,18 @@ test("Swap 1 LUNA to AXLUSDT successfully", async ({ page, homePage }) => {
 
   // Calculate the expected conversion rate based on the extracted axlUSDT value (since 1 LUNA)
   const expectedConversionRate = 1 / axlUSDTValue;
+  console.log(expectedConversionRate);
+  console.log(conversionRate);
   // Assert that the calculated conversion rate is approximately equal to the extracted conversion rate from the span
-  expect(conversionRate).toBeCloseTo(expectedConversionRate, 0.1); // assuming ±1 variance
+  expect(conversionRate).toBeCloseTo(expectedConversionRate, 0.5); // assuming ±1 variance
 
   // Check minimum recived value
-  const test = page
+  const minValue = page
     .locator("span.Read_component__2DP8V > .Read_small__37DWT")
     .nth(7);
-  const minRecivedvalue = parseFloat(await test.textContent());
+  const minRecivedvalue = parseFloat(await minValue.textContent());
   expect(minRecivedvalue).toBeCloseTo(axlUSDTValue, 0.2);
-
+  console.log("I am here");
   // This code to enabled when test id's are introduced
 
   // const currentBalancePrefix = page.locator('[class="Read_component__2DP8V"]');

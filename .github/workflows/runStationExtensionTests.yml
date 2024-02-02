@@ -9,15 +9,16 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    environment: MY_ORG_PAT
     env:
-      STATION_PATH: /station-extension/station-wallet/build
-      token: ${{ secrets.MY_ORG_PAT.MY_ORG_PAT}}
+      STATION_PATH: ${{ github.workspace }}/station-extension/station-wallet/build
     steps:
       - name: Checkout TerraShield
         uses: actions/checkout@v2
         with:
           repository: "DimitrijeDragasevic/TerraShield"
           path: "TerraShield"
+          token: ${{ secrets.MY_ORG_PAT }}
 
       - name: Clone Station Extension
         uses: actions/checkout@v2
@@ -25,14 +26,16 @@ jobs:
           repository: "terra-money/station-wallet"
           ref: "refs/tags/8.0.5.3"
           path: "station-extension"
-          token: ${{ secrets.MY_ORG_PAT.MY_ORG_PAT }}
+          token: ${{ secrets.MY_ORG_PAT }}
 
       - name: Build Station Extension
         run: |
           cd station-extension/station-wallet
+          npm install
           npm run build
 
       - name: Run TerraShield Tests
         run: |
           cd TerraShield
+          npm install
           npx playwright test tests/stationExtensionTest

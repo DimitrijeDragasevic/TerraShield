@@ -18,7 +18,7 @@ jobs:
         with:
           repository: "DimitrijeDragasevic/TerraShield"
           path: "TerraShield"
-          token: ${{ secrets.MY_ORG_PAT }}
+          token: ${{ secrets.STATION_WALLET }}
 
       - name: Clone Station Extension
         uses: actions/checkout@v2
@@ -26,7 +26,7 @@ jobs:
           repository: "terra-money/station-wallet"
           ref: "refs/tags/8.0.5.3"
           path: "station-extension"
-          token: ${{ secrets.MY_ORG_PAT }}
+          token: ${{ secrets.STATION_WALLET }}
 
       - name: Build Station Extension
         run: |

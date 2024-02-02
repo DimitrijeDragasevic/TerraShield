@@ -71,9 +71,7 @@ test("Swap 1 LUNA to AXLUSDT successfully", async ({ page, homePage }) => {
 
   // Extract the axlUSDT value
   const axlUSDTValueText = await axlUSDTSpan.textContent();
-  console.log(axlUSDTValueText);
   const axlUSDTValue = parseFloat("0" + axlUSDTValueText);
-  console.log(axlUSDTValue);
   // Ensure you found the axlUSDT value
   if (!axlUSDTValue) {
     throw new Error("Unable to extract axlUSDT value from the span.");
@@ -89,8 +87,6 @@ test("Swap 1 LUNA to AXLUSDT successfully", async ({ page, homePage }) => {
 
   // Calculate the expected conversion rate based on the extracted axlUSDT value (since 1 LUNA)
   const expectedConversionRate = 1 / axlUSDTValue;
-  console.log(expectedConversionRate);
-  console.log(conversionRate);
   // Assert that the calculated conversion rate is approximately equal to the extracted conversion rate from the span
   expect(conversionRate).toBeCloseTo(expectedConversionRate, 0.5); // assuming ±1 variance
 

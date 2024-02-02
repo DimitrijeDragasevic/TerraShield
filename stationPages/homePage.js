@@ -214,7 +214,6 @@ export class HomePage {
         })
         .getByRole(role);
     }
-    await this.homePage.pause()
     await expect(button).toBeVisible();
 
     if (click) {

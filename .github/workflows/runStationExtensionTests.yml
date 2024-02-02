@@ -31,6 +31,7 @@ jobs:
       - name: Build Station Extension
         run: |
           cd station-extension/station-extension
+          ls -a
           npm install
           npm run build
 

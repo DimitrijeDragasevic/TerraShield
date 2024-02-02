@@ -10,7 +10,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      STATION_PATH: ${{ github.workspace }}/station-extension/build
+      STATION_PATH: /station-extension/station-wallet/build
     steps:
       - name: Checkout TerraShield
         uses: actions/checkout@v2

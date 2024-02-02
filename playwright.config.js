@@ -14,7 +14,7 @@ const test = baseTest.extend({
         `--disable-extensions-except=${pathToExtension}`,
         `--load-extension=${pathToExtension}`,
       ],
-      viewport: { width: 1920, height: 1080 },
+      viewport: { width: 1280, height: 1024 },
       baseURL: process.env.BASE_URL,
     });
     await context.waitForEvent("serviceworker");

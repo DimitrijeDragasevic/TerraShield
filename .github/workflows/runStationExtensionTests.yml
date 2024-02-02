@@ -1,0 +1,36 @@
+name: Run TerraShield Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      STATION_PATH: ${{ github.workspace }}/station-extension/build
+    steps:
+      - name: Checkout TerraShield
+        uses: actions/checkout@v2
+        with:
+          repository: "DimitrijeDragasevic/TerraShield"
+          path: "TerraShield"
+
+      - name: Clone Station Extension
+        uses: actions/checkout@v2
+        with:
+          repository: "terra-money/station-extension"
+          ref: "refs/tags/<latest-tag>"
+          path: "station-extension"
+
+      - name: Build Station Extension
+        run: |
+          cd station-extension
+          npm run build
+
+      - name: Run TerraShield Tests
+        run: |
+          cd TerraShield
+          npx playwright test tests/stationExtensionTest

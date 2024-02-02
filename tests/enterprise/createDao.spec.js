@@ -3,7 +3,7 @@ import {
   createTokenDAO,
   createMultiSigDao,
   createNftDAO,
-} from "../../enterpise/createDao";
+} from "../../enterprise/createDao";
 const { test, expect } = require("../../playwright.config");
 dotenv.config();
 

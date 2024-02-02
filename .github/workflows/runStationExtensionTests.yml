@@ -21,7 +21,7 @@ jobs:
       - name: Clone Station Extension
         uses: actions/checkout@v2
         with:
-          repository: "terra-money/station-extension"
+          repository: "terra-money/station-wallet"
           ref: "refs/tags/8.0.5.3"
           path: "station-extension"
 

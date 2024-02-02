@@ -27,7 +27,7 @@ jobs:
 
       - name: Build Station Extension
         run: |
-          cd station-extension
+          cd station-extension/station-wallet
           npm run build
 
       - name: Run TerraShield Tests

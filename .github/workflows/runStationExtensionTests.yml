@@ -31,8 +31,8 @@ jobs:
       - name: Build Station Extension
         run: |
           cd station-extension/station-extension
-          ls -a
           npm install
+          cat node_modules/webextension-polyfill/dist/browser-polyfill.js
           npm run build
 
       - name: Run TerraShield Tests

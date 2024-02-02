@@ -24,6 +24,7 @@ jobs:
           repository: "terra-money/station-wallet"
           ref: "refs/tags/8.0.5.3"
           path: "station-extension"
+          token: ${{ secrets.MY_ORG_PAT }}
 
       - name: Build Station Extension
         run: |

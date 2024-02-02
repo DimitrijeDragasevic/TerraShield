@@ -52,7 +52,7 @@ const test = baseTest.extend({
 });
 
 const config = defineConfig({
-  testDir: "./tests/enterprise",
+  testDir: "./tests",
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,

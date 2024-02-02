@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       STATION_PATH: /station-extension/station-wallet/build
+      token: ${{ secrets.MY_ORG_PAT }}
     steps:
       - name: Checkout TerraShield
         uses: actions/checkout@v2

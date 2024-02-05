@@ -10,8 +10,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     environment: MY_ORG_PAT
-    env:
-      STATION_PATH: ${{ github.workspace }}/station-extension/station-wallet/build
     steps:
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -25,23 +23,20 @@ jobs:
           path: "TerraShield"
           token: ${{ secrets.STATION_WALLET }}
 
-      - name: Clone Station Extension Monorepo
+      - name: Clone Station Wallet Monorepo
         uses: actions/checkout@v2
         with:
           repository: "terra-money/station-wallet"
-          ref: "testGitFlow"
-          path: "station-extension"
+          path: "station-wallet"
           token: ${{ secrets.STATION_WALLET }}
 
       - name: Install Dependencies for Station-UI
         run: |
-          cd station-extension/station-ui
+          cd station-wallet/station-ui
           npm install
 
       - name: Install Dependencies for Terra-Utils
         run: |
-          ls -a 
-          ls -a ../
           cd ../terra-utils
           npm install
 

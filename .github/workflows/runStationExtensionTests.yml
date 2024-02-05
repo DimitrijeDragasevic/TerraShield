@@ -13,6 +13,11 @@ jobs:
     env:
       STATION_PATH: ${{ github.workspace }}/station-extension/station-wallet/build
     steps:
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.14.2'
+
       - name: Checkout TerraShield
         uses: actions/checkout@v2
         with:

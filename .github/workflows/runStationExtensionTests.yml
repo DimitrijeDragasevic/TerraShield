@@ -40,6 +40,8 @@ jobs:
 
       - name: Install Dependencies for Terra-Utils
         run: |
+          ls -a 
+          ls -a ../
           cd ../terra-utils
           npm install
 

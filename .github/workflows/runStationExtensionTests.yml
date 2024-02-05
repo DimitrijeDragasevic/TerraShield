@@ -25,7 +25,7 @@ jobs:
           path: "TerraShield"
           token: ${{ secrets.STATION_WALLET }}
 
-      - name: Clone Station Extension
+      - name: Clone Station Extension Monorepo
         uses: actions/checkout@v2
         with:
           repository: "terra-money/station-wallet"
@@ -33,15 +33,35 @@ jobs:
           path: "station-extension"
           token: ${{ secrets.STATION_WALLET }}
 
+      - name: Install Dependencies for Station-UI
+        run: |
+          cd station-extension/station-ui
+          npm install
+
+      - name: Install Dependencies for Terra-Utils
+        run: |
+          cd ../terra-utils
+          npm install
+
       - name: Build Station Extension
         run: |
-          cd station-extension/station-extension
+          cd ../station-extension
           npm install
-          ls -l "node_modules/webextension-polyfill/dist"
           npm run build
 
-      - name: Run TerraShield Tests
-        run: |
-          cd TerraShield
-          npm install
-          npx playwright test tests/stationExtensionTest
+      - name: Install Playwright
+        run: npm install playwright
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Run Playwright tests
+        run: npx playwright test tests/stationExtensionTest
+        working-directory: TerraShield
+
+      - name: Upload Playwright test results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: playwright-report
+          path: TerraShield/playwright-report/

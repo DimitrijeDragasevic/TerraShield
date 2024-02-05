@@ -38,14 +38,12 @@ jobs:
       - name: Install Dependencies for Terra-Utils
         run: |
           ls -a
-          ls -a ../
-          pwd
-          cd ../terra-utils
+          cd station-wallet/station-ui
           npm install
 
       - name: Build Station Extension
         run: |
-          cd ../station-extension
+          cd station-wallet/station-extension
           npm install
           npm run build
 

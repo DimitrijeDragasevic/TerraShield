@@ -23,24 +23,25 @@ jobs:
           path: "TerraShield"
           token: ${{ secrets.STATION_WALLET }}
 
-      - name: Clone Station Wallet Monorepo
+      - name: Clone Station Wallet Monorepo (testGitFlow Branch)
         uses: actions/checkout@v2
         with:
           repository: "terra-money/station-wallet"
-          ref: "testGitFlow" 
+          ref: "testGitFlow"
           path: "station-wallet"
           token: ${{ secrets.STATION_WALLET }}
 
-      - name: Install Dependencies for Station-UI
+      - name: Install and Build Dependencies for Station-UI
         run: |
           cd station-wallet/station-ui
           npm install
+          npm run build  # Add build command for station-ui
 
-      - name: Install Dependencies for Terra-Utils
+      - name: Install and Build Dependencies for Terra-Utils
         run: |
-          ls -a
-          cd station-wallet/station-ui
+          cd station-wallet/terra-utils
           npm install
+          npm run build  # Add build command for terra-utils
 
       - name: Build Station Extension
         run: |

@@ -11,10 +11,15 @@ jobs:
     runs-on: ubuntu-latest
     environment: MY_ORG_PAT
     steps:
+
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '16.14.2'
+
+      - name: Install TypeScript globally
+        run: npm install -g typescript
 
       - name: Checkout TerraShield
         uses: actions/checkout@v2
@@ -34,19 +39,19 @@ jobs:
       - name: Install and Build Dependencies for Station-UI
         run: |
           cd station-wallet/station-ui
-          npm install
+          npm install -g
           npm run build  # Add build command for station-ui
 
       - name: Install and Build Dependencies for Terra-Utils
         run: |
           cd station-wallet/terra-utils
-          npm install
+          npm install -g
           npm run build  # Add build command for terra-utils
 
       - name: Build Station Extension
         run: |
           cd station-wallet/station-extension
-          npm install
+          npm install -g
           npm run build
 
       - name: Install Playwright

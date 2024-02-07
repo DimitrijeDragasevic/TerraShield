@@ -25,16 +25,16 @@ export class HomePage {
     this.assetListFilterInputButton = "assetlist-filter-input";
     this.assetListClearFilterButton = "assetlist-clear-filter-button";
     this.settingsButton = "settings-button";
-    this.closeButton = "close-button"
+    this.closeButton = "close-button";
     this.dashboardButton = "dashboard-button";
     this.newWalletButton = "button-item-0";
     this.importWalletButton = "button-item-1";
     this.newMultiSigWalletButon = "button-item-2";
     this.acceswithLedgerButton = "button-item-3";
-    this.mainNet= "radio-list-item-0";
-    this.testNet= "radio-list-item-1";
-    this.terraClassic= "radio-list-item-2";
-    this.localTerra= "radio-list-item-3";
+    this.mainNet = "radio-list-item-0";
+    this.testNet = "radio-list-item-1";
+    this.terraClassic = "radio-list-item-2";
+    this.localTerra = "radio-list-item-3";
   }
 
   async initialize() {
@@ -101,7 +101,7 @@ export class HomePage {
   }
 
   async verifyElementsManageWalletsForm() {
-    await this.homePage.getByTestId(this.addWalletButton).click()
+    await this.homePage.getByTestId(this.addWalletButton).click();
     await expect(
       await this.homePage.getByTestId(this.newWalletButton)
     ).toBeVisible();
@@ -143,7 +143,9 @@ export class HomePage {
     await expect(this.homePage.getByTestId(this.mainContainer)).toBeVisible();
     await expect(this.homePage.getByTestId(this.tabsContainer)).toBeVisible();
     await expect(this.homePage.getByTestId(this.settingsButton)).toBeVisible();
-    await expect(this.homePage.getByTestId(this.dashboardButton).first()).toBeVisible();
+    await expect(
+      this.homePage.getByTestId(this.dashboardButton).first()
+    ).toBeVisible();
   }
 
   async verifyWallet(walletName) {
@@ -167,11 +169,31 @@ export class HomePage {
     await this.homePage.bringToFront();
     await this.homePage.getByRole("button", { name: "Connect" }).click();
   }
+  
   async approveTransaction(password = "Testtest123!") {
     await this.homePage.bringToFront();
-    await this.homePage.reload();
-    await this.homePage.getByRole("button", { name: "Post" }).click();
+  
+    let postButton;
+    while (!postButton) {
+      await this.homePage.reload();
+      // Use a short wait to allow the page to load
+      await this.homePage.waitForTimeout(1000); 
+      try {
+        postButton = await this.homePage.getByRole("button", { name: "Post" });
+      } catch (e) {
+        // If the button is not found, postButton remains undefined
+        // and the loop will continue
+      }
+    }
+  
+    // Click the button once it's found
+    if (postButton) {
+      await postButton.click();
+    }
   }
+  
+  
+  
 
   async goToManageWalletsMenu() {
     await this.homePage.reload();
@@ -309,7 +331,7 @@ export class HomePage {
     if (initialize) {
       await this.expectButton(this.settingsButton, "id");
     }
-    
+
     await this.expectButton(buttonText, "name");
 
     if (close) {

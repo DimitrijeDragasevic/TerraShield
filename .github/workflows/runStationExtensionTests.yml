@@ -11,12 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     environment: MY_ORG_PAT
     steps:
-
-
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16.14.2'
+          node-version: "16.14.2"
 
       - name: Install TypeScript globally
         run: npm install -g typescript
@@ -46,7 +44,7 @@ jobs:
       - name: Install and Build Dependencies for Terra-Utils
         run: |
           cd station-wallet/terra-utils
-          npm install -g
+          npm install
           npm run build  # Add build command for terra-utils
 
       - name: Build Station Extension

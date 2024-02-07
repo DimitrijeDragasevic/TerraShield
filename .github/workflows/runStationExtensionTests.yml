@@ -39,8 +39,9 @@ jobs:
       - name: Install and Build Dependencies for Station-UI
         run: |
           cd station-wallet/station-ui
-          npm install -g
-          npm run build  # Add build command for station-ui
+          npm install
+          npm run build
+          npm pack
 
       - name: Install and Build Dependencies for Terra-Utils
         run: |
@@ -51,8 +52,7 @@ jobs:
       - name: Build Station Extension
         run: |
           cd station-wallet/station-extension
-          npm install -g
-          npm run build
+          npm i station-wallet/station-ui/terra-money-station-ui-1.0.4.tgz && npm i && npm run build
 
       - name: Install Playwright
         run: npm install playwright

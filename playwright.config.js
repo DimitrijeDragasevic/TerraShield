@@ -51,7 +51,7 @@ const test = baseTest.extend({
   },
 });
 
-const config = defineConfig({
+export default defineConfig({
   testDir: "./tests",
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
@@ -78,12 +78,11 @@ const config = defineConfig({
       name: "Google Chrome",
       use: { ...devices["Desktop Chrome"], channel: "chrome" }, // or 'chrome-beta'
     },
-    // Add more configurations as needed...
+    
   ],
 });
 
 export {
   test,
-  expect,
-  config,
+  expect
 };

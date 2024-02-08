@@ -5,16 +5,24 @@ import { PageFactory } from "./stationPages/pageFactory";
 
 dotenv.config();
 
+const pathToExtension = process.env.STATION_PATH;
+const defaultViewport = { width: 1280, height: 1024 };
+const mobileViewport =  { width: 414, height: 896 }; // Requested Iphone XR size
+
+
 const test = baseTest.extend({
   context: async ({}, use) => {
-    const pathToExtension = process.env.STATION_PATH;
+
+    const isMobile = process.env.IS_MOBILE === 'true';
+    const viewport = isMobile ? mobileViewport : defaultViewport;
+    
     const context = await chromium.launchPersistentContext("", {
       headless: false,
       args: [
         `--disable-extensions-except=${pathToExtension}`,
         `--load-extension=${pathToExtension}`,
       ],
-      viewport: { width: 1280, height: 1024 },
+      viewport: viewport,
       baseURL: process.env.BASE_URL,
     });
     await context.waitForEvent("serviceworker");
@@ -78,7 +86,6 @@ export default defineConfig({
       name: "Google Chrome",
       use: { ...devices["Desktop Chrome"], channel: "chrome" }, // or 'chrome-beta'
     },
-    
   ],
 });
 

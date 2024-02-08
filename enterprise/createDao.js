@@ -215,7 +215,7 @@ export async function createMultiSigDao(page, daoName) {
 
 // Function to navigate to the Create DAO page and select DAO type
 async function navigateToCreateDAO(page, daoType) {
-  await page.getByRole("link", { name: "Create DAO" }).click();
+  await page.getByRole("link", { name: "Create DAO" }).first().click();
   await page.getByText(daoType).click();
   await page.getByRole("button", { name: "Next" }).click();
 }

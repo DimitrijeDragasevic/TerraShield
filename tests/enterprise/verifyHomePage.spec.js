@@ -2,12 +2,14 @@ import dotenv from 'dotenv';
 const { test, expect } = require("../../playwright.config");
 dotenv.config();
 
-test.beforeEach(async ({ authPage, homePage }) => {
-  await authPage.fillSeedForm("Test wallet 1", "Testtest123!");
-  await authPage.verifyFirstWalletAdded();
-  const TESTNET = process.env.IS_TESTNET === 'true';
+test.beforeEach(async ({ entryPage, homePage }) => {
+  await entryPage.fillPhraseForm("Test wallet 1", "Testtest123!");
+  await homePage.enterPassword();
+  await homePage.verifyElements("Test wallet 1");
+
+  const TESTNET = process.env.IS_TESTNET === "true";
   if (TESTNET) {
-      await homePage.switchNetwork("Testnet");
+    await homePage.switchNetwork("Testnet");
   }
 });
 

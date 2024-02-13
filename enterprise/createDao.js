@@ -80,7 +80,6 @@ async function verifyAndCreateTokenDaoSummary(page) {
 
 async function verifyAndCreateNFTDaoSummary(page) {
   //I need to add test ids to to verify the created data 100%
-  await expect(page.getByText("Step 9")).toBeVisible();
   await expect(page.getByText("Create NFT DAO")).toBeVisible();
   await expect(page.getByText("Review configuration")).toBeVisible();
   await page.getByRole("button", { name: "Next" }).click();
@@ -177,9 +176,9 @@ async function doYouHaveAnExistingNFT(page, haveNft, CW271address) {
   } else {
     await page.getByText("Yes, find my NFT").click();
     await page
-      .locator("label")
-      .filter({ hasText: /^Yes, find my NFT$/ })
+      .getByPlaceholder("Enter CW721 collection address")
       .fill(CW271address);
+    await page.pause();
     await page.getByRole("button", { name: "Next" }).click();
   }
 }

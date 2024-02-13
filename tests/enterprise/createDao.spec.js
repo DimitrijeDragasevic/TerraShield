@@ -110,7 +110,7 @@ test("Create a NFT DAO", async ({ page, homePage }) => {
   const NFT =
     "terra1nh9m74gyhkjfvxhzyp426s8vfem2q8sy2d662xplwvarxdwnuj6ql4ecch";
 
-  await createNftDAO(page, daoName, false, NFT);
+  await createNftDAO(page, daoName, true, NFT);
 
   await homePage.approveTransaction();
   await page.bringToFront();

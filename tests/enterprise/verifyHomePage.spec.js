@@ -22,12 +22,11 @@ test("Verify elements on the home page", async ({ page, homePage }) => {
 
   await expect(page.getByText('DashboardCreate DAO')).toBeVisible();
   await expect(page.getByRole('link', { name: 'Create DAO' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Top DAOs by TVL' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Recent proposals' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Top DAOs by Treasury Holdings' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Last 7 days proposals' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'DAO', exact: true })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Dashboard' })).toBeVisible();
-
-  await expect(page.getByText('FAVOURITES')).toBeVisible();
+  await expect(page.getByText('FAVORITES')).toBeVisible();
   await expect(page.getByRole('link', { name: 'Browse' })).toBeVisible();
 
   await page.getByRole('link', { name: 'Browse' }).click()

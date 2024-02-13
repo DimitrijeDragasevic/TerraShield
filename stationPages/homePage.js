@@ -177,9 +177,10 @@ export class HomePage {
     while (!postButton) {
       await this.homePage.reload();
       // Use a short wait to allow the page to load
-      await this.homePage.waitForTimeout(1000); 
+      await this.homePage.waitForTimeout(2000); 
       try {
         postButton = await this.homePage.getByRole("button", { name: "Post" });
+        await expect(postButton).toHaveAttribute('disabled', 'false');
       } catch (e) {
         // If the button is not found, postButton remains undefined
         // and the loop will continue

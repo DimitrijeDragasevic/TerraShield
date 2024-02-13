@@ -30,7 +30,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: "terra-money/station-wallet"
-          ref: "main"
+          ref: "testGitFlow"
           path: "station-wallet"
           token: ${{ secrets.STATION_WALLET }}
 

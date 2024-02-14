@@ -152,8 +152,9 @@ test("Verify created Token DAO", async ({ page, homePage }) => {
     page.getByText("DAO treasury doesn't have any transactions")
   ).toBeVisible();
   await page.getByText("Proposals").click();
+  await expect(page.getByText('Status')).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Proposal' })).toBeVisible();
   await expect(page.getByPlaceholder("Search...")).toBeVisible();
-  await expect(page.getByText("StatusNew Proposal")).toBeVisible();
 
   await page.getByText("Rewards").click();
   await expect(page.getByRole("heading", { name: "Rewards" })).toBeVisible({

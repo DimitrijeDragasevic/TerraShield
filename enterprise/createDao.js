@@ -178,8 +178,10 @@ async function doYouHaveAnExistingNFT(page, haveNft, CW271address) {
     await page
       .getByPlaceholder("Enter CW721 collection address")
       .fill(CW271address);
-    await page.pause();
-    await page.getByRole("button", { name: "Next" }).click();
+    await expect(page.getByText("nftt").first()).toBeVisible();
+    // Locate the button
+    const nextButton = page.getByRole("button", { name: "Next" });
+    await nextButton.click();
   }
 }
 

@@ -152,7 +152,6 @@ test("Verify created Token DAO", async ({ page, homePage }) => {
     page.getByText("DAO treasury doesn't have any transactions")
   ).toBeVisible();
   await page.getByText("Proposals").click();
-  await page.pause();
   await expect(page.getByPlaceholder("Search...")).toBeVisible();
   await expect(page.getByText("StatusNew Proposal")).toBeVisible();
 

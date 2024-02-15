@@ -17,7 +17,7 @@ const test = baseTest.extend({
     const viewport = isMobile ? mobileViewport : defaultViewport;
     
     const context = await chromium.launchPersistentContext("", {
-      headless: true,
+      headless: false,
       args: [
         `--headless=new`,
         `--disable-extensions-except=${pathToExtension}`,

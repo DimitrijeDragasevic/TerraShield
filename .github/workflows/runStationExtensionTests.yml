@@ -51,9 +51,12 @@ jobs:
         run: |
           cd station-wallet/station-extension
           npm i ../station-ui/terra-money-station-ui-1.0.4.tgz && npm i && npm run build
+          echo "STATION_PATH=$(pwd)/build" >> $GITHUB_ENV
 
       - name: Install Playwright
-        run: npm install playwright
+        run: |
+          echo 
+          npm install playwright
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
@@ -63,6 +66,13 @@ jobs:
         working-directory: TerraShield
 
       - name: Run Playwright tests
+        env:
+          SEED_PHRASE: ${{ secrets.SEED_PHRASE }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          IS_TESTNET: ${{ secrets.IS_TESTNET }}
+          IS_MOBILE: ${{ secrets.IS_MOBILE }}
+          BASE_URL: ${{ secrets.BASE_URL }}
+          PRIVATE_KEY_TWO: ${{ secrets.PRIVATE_KEY_TWO }}
         run: npx playwright test tests/stationExtensionTest
         working-directory: TerraShield
 

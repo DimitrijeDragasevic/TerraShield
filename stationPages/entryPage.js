@@ -53,7 +53,7 @@ export class EntryPage extends HomePage {
     
     await this.page.bringToFront();
     await this.page.waitForLoadState();
-    await this.page.waitForLoadState();
+    await this.page.reload();
     await this.page.fill(this.inputName, walletName);
 
     await this.page.fill(this.inputMnemonicSeed, seed);

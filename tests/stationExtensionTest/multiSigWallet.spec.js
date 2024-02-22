@@ -16,7 +16,7 @@ test("Create mutisig wallet on station wallet extension", async ({
     "terra1u28fgu0p99eh9xc4623k6cw6qmfdnl9un23yxs",
     "terra10detxcnq49r3nnze7zuqprl7yqdh34fulqtakw",
   ];
-  await multisigPage.enterPassword();
+  await multisigPage.page.reload();
   await multisigPage.createMutliSigWallet(addresses, "2");
   await homePage.verifyWallet("MultiSig wallet");
 });

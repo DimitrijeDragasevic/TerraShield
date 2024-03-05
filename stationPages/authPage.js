@@ -10,7 +10,7 @@ const expect = require("@playwright/test").expect;
 
 export class AuthPage extends HomePage {
   /**
-   * Constructor initializes a new instance of the SeedPage class.
+   * Constructor initializes a new instance of the AuthPage class.
    * @param {Object} browserContext - The browser context in which the page operates.
    */
   constructor(browserContext) {

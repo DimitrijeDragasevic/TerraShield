@@ -35,11 +35,20 @@ export class EntryPage extends HomePage {
    */
   async createPage() {
     const pagePromise = this.getPageWithUrlPart("auth/recover");
-    await this.homePage.getByRole("button").click();
+    await this.removeDialog();
     await this.homePage
       .getByRole("button", { name: "Import existing wallet" })
       .click();
     this.page = await pagePromise;
+  }
+
+  /**
+  * This has been added to handle the dialog popup in order for the tests to keep working
+  * example: Changes from 28th of February
+  */
+  async removeDialog() {
+    await expect(this.homePage.getByRole('dialog')).toBeVisible();
+    await this.homePage.mouse.click(200, 0);
   }
 
   /**

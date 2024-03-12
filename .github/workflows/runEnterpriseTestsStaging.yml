@@ -1,4 +1,4 @@
-name: Run TerraShield Enterprise Tests
+name: Run TerraShield Enterprise Staging Tests
 
 on:
   push:

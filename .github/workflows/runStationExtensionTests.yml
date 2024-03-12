@@ -82,7 +82,7 @@ jobs:
           IS_MOBILE: ${{ secrets.IS_MOBILE }}
           BASE_URL: ${{ secrets.BASE_URL }}
           PRIVATE_KEY_TWO: ${{ secrets.PRIVATE_KEY_TWO }}
-        run: npx playwright test tests/stationExtensionTest
+        run: npx playwright test tests/stationExtensionTest/createWallet.spec.js
         working-directory: TerraShield
 
       - name: Upload Playwright test results

@@ -1,0 +1,93 @@
+name: Run TerraShield Enterprise Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    environment: MY_ORG_PAT
+    steps:
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16.14.2"
+
+      - name: Install TypeScript globally
+        run: npm install -g typescript
+
+      - name: Checkout TerraShield
+        uses: actions/checkout@v2
+        with:
+          repository: "DimitrijeDragasevic/TerraShield"
+          path: "TerraShield"
+          token: ${{ secrets.STATION_WALLET }}
+
+      - name: Clone Station Wallet Monorepo (testGitFlow Branch)
+        uses: actions/checkout@v2
+        with:
+          repository: "terra-money/station-wallet"
+          ref: "testGitFlow"
+          path: "station-wallet"
+          token: ${{ secrets.STATION_WALLET }}
+
+      - name: Install and Build Dependencies for Station-UI
+        run: |
+          cd station-wallet/station-ui
+          npm install
+          npm run build
+          npm pack
+
+      - name: Install and Build Dependencies for Terra-Utils
+        run: |
+          cd station-wallet/terra-utils
+          npm install
+          npm run build  # Add build command for terra-utils
+
+      - name: Build Station Extension
+        run: |
+          cd station-wallet/station-extension
+          npm i ../station-ui/terra-money-station-ui-1.0.4.tgz && npm i && npm run build
+          echo "STATION_PATH=$(pwd)/build" >> $GITHUB_ENV
+
+      - name: Modify manifest.json
+        run: |
+          # Navigate to the build folder
+          cd station-wallet/station-extension/build
+      
+          # Remove "browser-polyfill.js" from the content_scripts section of manifest.json
+          jq '.content_scripts[0].js = [.content_scripts[0].js[] | select(. != "browser-polyfill.js")]' manifest.json > manifest_modified.json
+      
+          # Replace original manifest.json with the modified one
+          mv manifest_modified.json manifest.json
+      
+      - name: Install Playwright
+        run: npm install playwright
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Install framework dependacies
+        run: npm i
+        working-directory: TerraShield
+
+      - name: Run Playwright tests
+        env:
+          SEED_PHRASE: ${{ secrets.SEED_PHRASE }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          IS_TESTNET: ${{ secrets.IS_TESTNET }}
+          IS_MOBILE: ${{ secrets.IS_MOBILE }}
+          BASE_URL: ${{ secrets.STATION_WEB}}
+          PRIVATE_KEY_TWO: ${{ secrets.PRIVATE_KEY_TWO }}
+        run: npx playwright test tests/stationWebTests
+        working-directory: TerraShield
+
+      - name: Upload Playwright test results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: playwright-report
+          path: TerraShield/playwright-report/

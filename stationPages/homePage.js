@@ -171,8 +171,8 @@ export class HomePage {
   }
   
   async approveTransaction(password = "Testtest123!") {
+    await this.homePage.reload();
     await this.homePage.bringToFront();
-  
     let postButton;
     while (!postButton) {
       await this.homePage.reload();
@@ -186,7 +186,6 @@ export class HomePage {
         // and the loop will continue
       }
     }
-  
     // Click the button once it's found
     if (postButton) {
       await postButton.click();

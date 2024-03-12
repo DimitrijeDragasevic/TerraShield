@@ -39,7 +39,6 @@ jobs:
           cd station-wallet/station-ui
           npm install
           npm run build
-          npm pack
 
       - name: Install and Build Dependencies for Terra-Utils
         run: |
@@ -50,7 +49,7 @@ jobs:
       - name: Build Station Extension
         run: |
           cd station-wallet/station-extension
-          npm i ../station-ui/terra-money-station-ui-1.0.10.tgz && npm i && npm run build
+          npm i && npm run build
           echo "STATION_PATH=$(pwd)/build" >> $GITHUB_ENV
 
       - name: Modify manifest.json

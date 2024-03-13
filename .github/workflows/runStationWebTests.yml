@@ -49,6 +49,8 @@ jobs:
       - name: Build Station Extension
         run: |
           cd station-wallet/station-extension
+          npm install axios
+          npm install @types/axios --save-dev
           npm i && npm run build
           echo "STATION_PATH=$(pwd)/build" >> $GITHUB_ENV
 

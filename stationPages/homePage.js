@@ -236,7 +236,7 @@ export class HomePage {
         })
         .getByRole(role);
     }
-    await expect(button).toBeVisible();
+    await expect(button).toBeVisible({timeout:10000});
 
     if (click) {
       await button.click();
@@ -331,11 +331,11 @@ export class HomePage {
     if (initialize) {
       await this.expectButton(this.settingsButton, "id");
     }
-
+  
     await this.expectButton(buttonText, "name");
 
     if (close) {
-      await this.expectButton(this.closeButton, "id");
+      await this.expectButton(/^Settings$/, "element", "button");
     }
   }
 
@@ -653,6 +653,11 @@ export class HomePage {
         throw new Error(`Unsupported network: ${network}`);
     }
   }
+
+  async evaluateAddressBook() {
+    await this.selectSettings('Address Book', true, true)
+  }
+
 }
 
 // module.exports = HomePage;

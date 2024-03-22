@@ -23,3 +23,22 @@
 // // test("Evaluate manage wallet functionality", async ({ homePage }) => {
 // //   await homePage.evaluateManageWallet();
 // // });
+
+import dotenv from "dotenv";
+dotenv.config();
+const { test, expect } = require("../../playwright.config.js");
+
+test.beforeEach(async ({ entryPage, homePage }) => {
+  await entryPage.fillPhraseForm("Test wallet 1", "Testtest123!");
+  await homePage.enterPassword();
+  await homePage.verifyElements();
+});
+
+test("Evalute settings", async ({
+  homePage,
+}) => {
+  await homePage.homePage.pause();
+  await homePage.evaluateAddressBook();
+  
+});
+

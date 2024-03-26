@@ -53,16 +53,16 @@ jobs:
           npm i ../station-ui/terra-money-station-ui-1.0.12.tgz && npm i && npm run build 
           echo "STATION_PATH=$(pwd)/build" >> $GITHUB_ENV
 
-      - name: Modify manifest.json
-        run: |
-          # Navigate to the build folder
-          cd station-wallet/station-extension/build
+      # - name: Modify manifest.json
+      #   run: |
+      #     # Navigate to the build folder
+      #     cd station-wallet/station-extension/build
       
-          # Remove "browser-polyfill.js" from the content_scripts section of manifest.json
-          jq '.content_scripts[0].js = [.content_scripts[0].js[] | select(. != "browser-polyfill.js")]' manifest.json > manifest_modified.json
+      #     # Remove "browser-polyfill.js" from the content_scripts section of manifest.json
+      #     jq '.content_scripts[0].js = [.content_scripts[0].js[] | select(. != "browser-polyfill.js")]' manifest.json > manifest_modified.json
       
-          # Replace original manifest.json with the modified one
-          mv manifest_modified.json manifest.json
+      #     # Replace original manifest.json with the modified one
+      #     mv manifest_modified.json manifest.json
       
       - name: Install Playwright
         run: npm install playwright

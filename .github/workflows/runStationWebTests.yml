@@ -8,13 +8,13 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on:  macos-latest
     environment: MY_ORG_PAT
     steps:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "16.14.2"
+          node-version: "16.0.0"
 
       - name: Install TypeScript globally
         run: npm install -g typescript
@@ -39,6 +39,7 @@ jobs:
           cd station-wallet/station-ui
           npm install
           npm run build
+          npm pack
 
       - name: Install and Build Dependencies for Terra-Utils
         run: |
@@ -49,8 +50,7 @@ jobs:
       - name: Build Station Extension
         run: |
           cd station-wallet/station-extension
-          npm i
-          npm run build
+          npm i ../station-ui/terra-money-station-ui-1.0.12.tgz && npm i && npm run build 
           echo "STATION_PATH=$(pwd)/build" >> $GITHUB_ENV
 
       - name: Modify manifest.json
@@ -80,7 +80,7 @@ jobs:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
           IS_TESTNET: ${{ secrets.IS_TESTNET }}
           IS_MOBILE: ${{ secrets.IS_MOBILE }}
-          BASE_URL: ${{ secrets.STATION_WEB}}
+          BASE_URL: ${{ secrets.STATION_WEB }}
           PRIVATE_KEY_TWO: ${{ secrets.PRIVATE_KEY_TWO }}
         run: npx playwright test tests/stationWebTests
         working-directory: TerraShield

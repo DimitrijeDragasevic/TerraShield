@@ -1,4 +1,4 @@
-name: Run TerraShield Tests
+name: Run TerraShield Extension Tests
 
 on:
   push:

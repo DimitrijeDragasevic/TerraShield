@@ -16,11 +16,6 @@ jobs:
         with:
           node-version: "16.14.2"
 
-      - name: Setup Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.8.11"
-
       - name: Install TypeScript globally
         run: npm install -g typescript
 

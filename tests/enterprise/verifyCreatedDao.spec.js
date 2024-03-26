@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import { createTokenDAO } from "../../enterprise/createDao";
+import { connectWallet } from "../../helpers/connectWalletProcedure";
 const { test, expect } = require("../../playwright.config");
 dotenv.config();
 
@@ -16,21 +17,13 @@ test.beforeEach(async ({ entryPage, homePage }) => {
 
 test("Verify created Token DAO", async ({ page, homePage }) => {
   test.slow();
-  await page.bringToFront();
-  await page.goto("/");
-  await page
-    .locator("div")
-    .filter({ hasText: /^DashboardConnect wallet$/ })
-    .getByRole("button")
-    .click();
 
-  await page.getByRole("button", { name: "Station Wallet" }).click();
-  await homePage.connectWallet();
-  await page.bringToFront();
+  await connectWallet(page, homePage);
 
   const now = new Date();
   const isoDate = now.toISOString();
   const daoName = `Dimi's TokenDao ${isoDate}`;
+  
   await createTokenDAO(page, daoName);
 
   await homePage.approveTransaction();
@@ -152,8 +145,8 @@ test("Verify created Token DAO", async ({ page, homePage }) => {
     page.getByText("DAO treasury doesn't have any transactions")
   ).toBeVisible();
   await page.getByText("Proposals").click();
-  await expect(page.getByText('Status')).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Proposal' })).toBeVisible();
+  await expect(page.getByText("Status")).toBeVisible();
+  await expect(page.getByRole("link", { name: "Proposal" })).toBeVisible();
   await expect(page.getByPlaceholder("Search...")).toBeVisible();
 
   await page.getByText("Rewards").click();

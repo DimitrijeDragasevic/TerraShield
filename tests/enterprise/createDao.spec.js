@@ -4,6 +4,7 @@ import {
   createMultiSigDao,
   createNftDAO,
 } from "../../enterprise/createDao";
+import { connectWallet } from "../../helpers/connectWalletProcedure";
 const { test, expect } = require("../../playwright.config");
 dotenv.config();
 
@@ -41,17 +42,8 @@ test.beforeEach(async ({ entryPage, homePage }) => {
  */
 test("Create a Token DAO", async ({ page, homePage }) => {
   test.slow();
-  await page.bringToFront();
-  await page.goto("/");
-  await page
-    .locator("div")
-    .filter({ hasText: /^DashboardConnect wallet$/ })
-    .getByRole("button")
-    .click();
 
-  await page.getByRole("button", { name: "Station Wallet" }).click();
-  await homePage.connectWallet();
-  await page.bringToFront();
+  await connectWallet(page, homePage);
 
   const now = new Date();
   const isoDate = now.toISOString();
@@ -93,15 +85,7 @@ test("Create a Token DAO", async ({ page, homePage }) => {
 test("Create a NFT DAO", async ({ page, homePage }) => {
   test.slow();
 
-  await page.goto("/");
-  await page
-    .locator("div")
-    .filter({ hasText: /^DashboardConnect wallet$/ })
-    .getByRole("button")
-    .click();
-  await page.getByRole("button", { name: "Station Wallet" }).click();
-  await homePage.connectWallet();
-  await page.bringToFront();
+  await connectWallet(page, homePage);
 
   const now = new Date();
   const isoDate = now.toISOString();
@@ -144,20 +128,13 @@ test("Create a NFT DAO", async ({ page, homePage }) => {
  */
 test("Create a MultiSig DAO", async ({ page, homePage }) => {
   test.slow();
+
+  await connectWallet(page, homePage);
+
   const now = new Date();
   const isoDate = now.toISOString();
 
   const daoName = `Dimi's MultisigDao ${isoDate}`;
-
-  await page.goto("/");
-  await page
-    .locator("div")
-    .filter({ hasText: /^DashboardConnect wallet$/ })
-    .getByRole("button")
-    .click();
-  await page.getByRole("button", { name: "Station Wallet" }).click();
-  await homePage.connectWallet();
-  await page.bringToFront();
 
   await createMultiSigDao(page, daoName);
 

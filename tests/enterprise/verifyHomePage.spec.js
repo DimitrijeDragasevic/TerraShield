@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import { connectWallet } from '../../helpers/connectWalletProcedure';
 const { test, expect } = require("../../playwright.config");
 dotenv.config();
 
@@ -14,11 +15,7 @@ test.beforeEach(async ({ entryPage, homePage }) => {
 });
 
 test("Verify elements on the home page", async ({ page, homePage }) => {
-  await page.goto("/");
-  await page.locator('div').filter({ hasText: /^DashboardConnect wallet$/ }).getByRole('button').click();
-  await page.getByRole('button', { name: 'Station Wallet' }).click();
-  await homePage.connectWallet();
-  await page.bringToFront();
+  await connectWallet(page, homePage);
 
   await expect(page.getByText('DashboardCreate DAO')).toBeVisible();
   await expect(page.getByRole('link', { name: 'Create DAO' })).toBeVisible();

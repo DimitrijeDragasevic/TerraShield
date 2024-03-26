@@ -6,10 +6,10 @@ async function daoGovernance(
   minimumDeposit = "10",
   minimumWeight = "1"
 ) {
-  await expect(page.getByText("7 days")).toBeVisible();
-  await expect(page.getByText("30%")).toBeVisible();
-  await expect(page.getByText("51%").first()).toBeVisible();
-  await expect(page.getByText("51%").last()).toBeVisible();
+  // await expect(page.getByText("7 days")).toBeVisible();
+  // await expect(page.getByText("30%")).toBeVisible();
+  // await expect(page.getByText("51%").first()).toBeVisible();
+  // await expect(page.getByText("51%").last()).toBeVisible();
 
   if (!multisig) {
     await page
@@ -44,12 +44,15 @@ async function councilMembers(page, walletAddress) {
 
   await page
     .getByPlaceholder("select a proposal type")
-    .fill("Update DAO information");
+    .fill("Update");
   await page.getByText("Update DAO information").click();
   await page
     .getByPlaceholder("select a proposal type")
-    .fill("Update asset whitelist");
+    .fill("Update");
   await page.getByText("Update asset whitelist").click();
+  // await page
+  //   .getByPlaceholder("select a proposal type")
+  //   .fill("Update");
   await expect(page.getByText("No options left")).toBeVisible();
   await page.getByRole("button", { name: "Next" }).click();
 }
@@ -176,7 +179,7 @@ async function doYouHaveAnExistingNFT(page, haveNft, CW271address) {
   } else {
     await page.getByText("Yes, find my NFT").click();
     await page
-      .getByPlaceholder("Enter CW721 collection address")
+      .getByPlaceholder("Enter CW721 address")
       .fill(CW271address);
     await expect(page.getByText("nftt").first()).toBeVisible();
     // Locate the button

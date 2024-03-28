@@ -1,5 +1,5 @@
 const expect = require("@playwright/test").expect;
-
+//TODO: create argument for prod
 async function daoGovernance(
   page,
   multisig = true,
@@ -17,7 +17,7 @@ async function daoGovernance(
       .fill(minimumDeposit);
     await expect(page.getByText("14 days")).toBeVisible();
   }
-
+  await page.locator('label').filter({ hasText: 'Allow early proposal execution' }).locator('div').first().click();
   await page.getByPlaceholder("Enter minimum weight").fill(minimumWeight);
   await page.getByRole("button", { name: "Next" }).click();
 }
@@ -50,10 +50,10 @@ async function councilMembers(page, walletAddress) {
     .getByPlaceholder("select a proposal type")
     .fill("Update");
   await page.getByText("Update asset whitelist").click();
-  // await page
-  //   .getByPlaceholder("select a proposal type")
-  //   .fill("Update");
-  await expect(page.getByText("No options left")).toBeVisible();
+  await page
+    .getByPlaceholder("select a proposal type")
+    .fill("Update");
+  // await expect(page.getByText("No options left")).toBeVisible();
   await page.getByRole("button", { name: "Next" }).click();
 }
 //'Migaloo', 'Neutron', 'Juno', 'Osmosis', 'Stargaze'

@@ -8,13 +8,13 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on:  macos-latest
     environment: MY_ORG_PAT
     steps:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "16.14.2"
+          node-version: "16.0.0"
 
       - name: Install TypeScript globally
         run: npm install -g typescript
@@ -50,20 +50,8 @@ jobs:
       - name: Build Station Extension
         run: |
           cd station-wallet/station-extension
-          npm i
-          npm run build
+          npm i ../station-ui/terra-money-station-ui-1.0.12.tgz && npm i && npm run build 
           echo "STATION_PATH=$(pwd)/build" >> $GITHUB_ENV
-
-      - name: Modify manifest.json
-        run: |
-          # Navigate to the build folder
-          cd station-wallet/station-extension/build
-      
-          # Remove "browser-polyfill.js" from the content_scripts section of manifest.json
-          jq '.content_scripts[0].js = [.content_scripts[0].js[] | select(. != "browser-polyfill.js")]' manifest.json > manifest_modified.json
-      
-          # Replace original manifest.json with the modified one
-          mv manifest_modified.json manifest.json
       
       - name: Install Playwright
         run: npm install playwright
@@ -81,7 +69,7 @@ jobs:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
           IS_TESTNET: ${{ secrets.IS_TESTNET }}
           IS_MOBILE: ${{ secrets.IS_MOBILE }}
-          BASE_URL: ${{ secrets.ENTERPRISE_STAGING}}
+          BASE_URL: ${{ secrets.ENTERPRISE_STAGING }}
           PRIVATE_KEY_TWO: ${{ secrets.PRIVATE_KEY_TWO }}
         run: npx playwright test tests/enterprise
         working-directory: TerraShield

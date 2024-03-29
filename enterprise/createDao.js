@@ -1,15 +1,19 @@
 const expect = require("@playwright/test").expect;
-//TODO: create argument for prod
+
 async function daoGovernance(
   page,
   multisig = true,
   minimumDeposit = "10",
   minimumWeight = "1"
 ) {
-  // await expect(page.getByText("7 days")).toBeVisible();
-  // await expect(page.getByText("30%")).toBeVisible();
-  // await expect(page.getByText("51%").first()).toBeVisible();
-  // await expect(page.getByText("51%").last()).toBeVisible();
+  if (process.env.BASE_URL.includes("staging")) {
+    await expect(page.getByText("7 minutes")).toBeVisible();
+  } else {
+    await expect(page.getByText("7 days")).toBeVisible();
+  }
+  await expect(page.getByText("30%")).toBeVisible();
+  await expect(page.getByText("51%").first()).toBeVisible();
+  await expect(page.getByText("51%").last()).toBeVisible();
 
   if (!multisig) {
     await page
@@ -17,7 +21,12 @@ async function daoGovernance(
       .fill(minimumDeposit);
     await expect(page.getByText("14 days")).toBeVisible();
   }
-  await page.locator('label').filter({ hasText: 'Allow early proposal execution' }).locator('div').first().click();
+  await page
+    .locator("label")
+    .filter({ hasText: "Allow early proposal execution" })
+    .locator("div")
+    .first()
+    .click();
   await page.getByPlaceholder("Enter minimum weight").fill(minimumWeight);
   await page.getByRole("button", { name: "Next" }).click();
 }
@@ -42,18 +51,15 @@ async function councilMembers(page, walletAddress) {
     .getByPlaceholder("Enter council member's address")
     .fill(walletAddress);
 
-  await page
-    .getByPlaceholder("select a proposal type")
-    .fill("Update");
+  await page.getByPlaceholder("select a proposal type").fill("Update");
   await page.getByText("Update DAO information").click();
-  await page
-    .getByPlaceholder("select a proposal type")
-    .fill("Update");
+  await page.getByPlaceholder("select a proposal type").fill("Update");
   await page.getByText("Update asset whitelist").click();
-  await page
-    .getByPlaceholder("select a proposal type")
-    .fill("Update");
-  // await expect(page.getByText("No options left")).toBeVisible();
+  if (process.env.BASE_URL.includes("staging")) {
+    await page.getByPlaceholder("select a proposal type").fill("Update");
+  } else {
+    await expect(page.getByText("No options left")).toBeVisible();
+  }
   await page.getByRole("button", { name: "Next" }).click();
 }
 //'Migaloo', 'Neutron', 'Juno', 'Osmosis', 'Stargaze'
@@ -178,9 +184,7 @@ async function doYouHaveAnExistingNFT(page, haveNft, CW271address) {
     await fillNftForm(page);
   } else {
     await page.getByText("Yes, find my NFT").click();
-    await page
-      .getByPlaceholder("Enter CW721 address")
-      .fill(CW271address);
+    await page.getByPlaceholder("Enter CW721 address").fill(CW271address);
     await expect(page.getByText("nftt").first()).toBeVisible();
     // Locate the button
     const nextButton = page.getByRole("button", { name: "Next" });

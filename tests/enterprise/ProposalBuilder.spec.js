@@ -8,12 +8,14 @@ import {
   navigateToProposals,
   createSimpleProposal,
   vote,
+  verifySpecificVotes,
 } from "../../enterprise/proposals";
 import { connectWallet } from "../../helpers/connectWalletProcedure";
 const { test, expect } = require("../../playwright.config");
 dotenv.config();
 
-let daoPage;
+let daoPage =
+  "https://staging.enterprise-protocol-next.pages.dev/dao?address=terra1ysfrtz4xgcz709ytrlregfq7wu25dsgd0gxkzqxcnwsv26h00c6sf33wy7";
 
 test.beforeEach(async ({ entryPage, homePage, page }) => {
   await entryPage.fillPhraseForm("Test wallet 1", "Testtest123!");
@@ -77,4 +79,50 @@ test("Creating and Approving a Simple Proposal", async ({ page, homePage }) => {
   await page.bringToFront();
   expect(page.getByText("tx completed")).toBeVisible({ timeout: 10000 });
   expect(page.getByText("executed")).toBeVisible({ timeout: 10000 });
+});
+
+test("Creating and Rejecting a Proposal", async ({
+  page,
+  homePage,
+  authPage,
+}) => {
+  test.slow();
+
+  await authPage.fillPhraseForm(
+    "Test wallet 2",
+    "Testtest123!",
+    process.env.SEED_PHRASE_TWO,
+    false
+  );
+  // switch back to first wallet
+  await homePage.switchWallet("Test wallet 1");
+
+  await connectWallet(page, homePage);
+  await page.goto(daoPage);
+  await page.bringToFront();
+
+  await navigateToProposals(page);
+  await createSimpleProposal(page);
+
+  await homePage.approveTransaction();
+
+  await page.bringToFront();
+  await expect(
+    page.getByRole("heading", { name: "Test simple proposal" })
+  ).toBeVisible({ timeout: 100000 });
+
+  await vote(page, "No");
+  await homePage.approveTransaction();
+
+  await page.bringToFront();
+
+  await verifySpecificVotes(page, [{ index: 0, expectedOutcome: "No" }]);
+
+  await homePage.switchWallet("Test wallet 2");
+  await page.bringToFront();
+  await vote(page, "No");
+  await homePage.approveTransaction();
+  await page.bringToFront();
+
+  await verifySpecificVotes(page, [{ index: 1, expectedOutcome: "No" }]);
 });

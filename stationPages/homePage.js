@@ -169,31 +169,54 @@ export class HomePage {
     await this.homePage.bringToFront();
     await this.homePage.getByRole("button", { name: "Connect" }).click();
   }
-  
+
   async approveTransaction(password = "Testtest123!") {
-    await this.homePage.reload();
     await this.homePage.bringToFront();
     let postButton;
-    while (!postButton) {
-      await this.homePage.reload();
-      // Use a short wait to allow the page to load
-      await this.homePage.waitForTimeout(2000); 
+    let attempts = 0;
+    const maxAttempts = 5; // Set a max attempt limit to prevent infinite loops
+
+    while (!postButton && attempts < maxAttempts) {
+      await this.homePage.reload({ waitUntil: "domcontentloaded" });
+      // Increment attempts after each reload
+      attempts++;
       try {
-        postButton = await this.homePage.getByRole("button", { name: "Post" });
-        await expect(postButton).toHaveAttribute('disabled', 'false');
+        // Use waitForSelector with a timeout instead of waitForTimeout for efficiency
+        // and to ensure the element is interactable.
+        postButton = await this.homePage.waitForSelector(
+          'role=button[name="Post"]',
+          {
+            state: "attached",
+            timeout: 5000, // Wait up to 5 seconds for the button to appear
+          }
+        );
+
+        // Validate if the post button is not disabled
+        const isDisabled = await postButton.isDisabled();
+        if (!isDisabled) {
+          // Exit the loop if the button is enabled and ready
+          break;
+        } else {
+          // Reset postButton if it's disabled to ensure another loop iteration
+          postButton = undefined;
+        }
       } catch (e) {
-        // If the button is not found, postButton remains undefined
-        // and the loop will continue
+        // Catch block to handle cases where waitForSelector times out or other exceptions
+        console.error("Error waiting for the Post button: ", e);
+        // Optionally implement a shorter wait before retrying to give the page some time to stabilize
+        await this.homePage.waitForTimeout(1000);
       }
     }
-    // Click the button once it's found
+
+    // Click the button once it's found and confirmed to be enabled
     if (postButton) {
       await postButton.click();
+    } else {
+      console.error(
+        "Failed to find or interact with the Post button after several attempts."
+      );
     }
   }
-  
-  
-  
 
   async goToManageWalletsMenu() {
     await this.homePage.reload();
@@ -620,6 +643,11 @@ export class HomePage {
     // Evaluate the application of asset management filters.
     await this.evaluateFilter("Hide non-whitelisted", "ATOM-OSMO LP");
     await this.evaluateFilter("Hide low-balance", "NTRN");
+  }
+
+  async switchWallet(walletName) {
+    this.goToManageWalletsMenu();
+    await this.homePage.getByText(walletName).click();
   }
 
   /**

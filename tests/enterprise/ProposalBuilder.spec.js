@@ -9,6 +9,8 @@ import {
   createSimpleProposal,
   vote,
   verifySpecificVotes,
+  processGovernanceProposal,
+  processAdvancedProposal,
 } from "../../enterprise/proposals";
 import { connectWallet } from "../../helpers/connectWalletProcedure";
 const { test, expect } = require("../../playwright.config");
@@ -125,4 +127,39 @@ test("Creating and Rejecting a Proposal", async ({
   await page.bringToFront();
 
   await verifySpecificVotes(page, [{ index: 1, expectedOutcome: "No" }]);
+});
+
+test("Creating a nested proposal", async ({ page, homePage }) => {
+  // update dao configuration
+  // custom wasm message
+  // send luna
+  // update dao information
+  // create cross chain treasury
+
+  test.slow();
+
+  await connectWallet(page, homePage);
+  await page.goto(daoPage);
+  await page.bringToFront();
+
+  await navigateToProposals(page);
+  const governanceProposals = [
+    {
+      type: "Update DAO information",
+      details: { daoDescription: "Test dao update" },
+    },
+  ];
+  const advancedProposals = [
+    {
+      type: "Execute custom WASM messages",
+      details: {
+        chain: "Juno",
+        message:
+          '{"wasm": {"execute": {"contract_addr": "terra1mg93d4g69tsf3x6sa9nkmkzc9wl38gdrygu0sewwcwj6l2a4089sdd7fgj","funds": [],"msg": "eyJjcmVhdGVfYWNjb3VudCI6e319"}}}',
+      },
+    },
+  ];
+  await processGovernanceProposal(page, governanceProposals);
+  await processAdvancedProposal(page, advancedProposals);
+  await page.pause();
 });

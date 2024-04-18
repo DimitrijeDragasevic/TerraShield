@@ -120,25 +120,12 @@ export async function vote(page, voteType) {
   }
 }
 
-// update dao configuration
-// custom wasm message
-// send luna
-// update dao information
-// create cross chain treasury
-
-// const tokenProposals = [
-//     { type: "Stake DAO treasury assets", details: { /* details here */ }},
-//     { type: "Update whitelisted assets", details: { /* details here */ }}
-// ];
-
-// const treasuriesProposals = [
-//     { type: "Create cross-chain treasury", details: { /* details here */ }},
-//     { type: "Send treasury assets", details: { /* details here */ }}
-// ];
-
-// await processTokenProposal(page, tokenProposals);
-// await processTreasuriesProposal(page, treasuriesProposals);
-
+/**
+ * Processes token-related proposals including reallocation, staking, unstaking, and updating whitelisted assets.
+ * Iterates through each proposal and calls the appropriate function based on the proposal type.
+ * @param {import('playwright').Page} page - The Playwright page object.
+ * @param {Array<Object>} proposals - An array of objects, each specifying the type of token proposal and its details.
+ */
 export async function processTokenProposal(page, proposals) {
   for (const proposal of proposals) {
     switch (proposal.type) {
@@ -160,6 +147,12 @@ export async function processTokenProposal(page, proposals) {
   }
 }
 
+/**
+ * Processes proposals related to DAO treasuries such as creating cross-chain treasuries, distributing assets, and more.
+ * Each proposal type triggers a specific action aligned with treasury management.
+ * @param {import('playwright').Page} page - The Playwright page object.
+ * @param {Array<Object>} proposals - An array of treasury-related proposals detailing the type and specifics needed to execute.
+ */
 export async function processTreasuriesProposal(page, proposals) {
   for (const proposal of proposals) {
     switch (proposal.type) {
@@ -181,6 +174,12 @@ export async function processTreasuriesProposal(page, proposals) {
   }
 }
 
+/**
+ * Processes governance proposals, handling changes in council, DAO settings, reward thresholds, and more.
+ * The function executes different governance-related tasks depending on the proposal type.
+ * @param {import('playwright').Page} page - The Playwright page object.
+ * @param {Array<Object>} proposals - An array of governance proposals each with specific details and type.
+ */
 export async function processGovernanceProposal(page, proposals) {
   for (const proposal of proposals) {
     switch (proposal.type) {
@@ -211,6 +210,12 @@ export async function processGovernanceProposal(page, proposals) {
   }
 }
 
+/**
+ * Processes advanced proposals specifically for executing custom WASM messages.
+ * Handles cases where advanced blockchain interactions are required.
+ * @param {import('playwright').Page} page - The Playwright page object.
+ * @param {Array<Object>} proposals - An array of advanced proposals focused on WASM message execution.
+ */
 export async function processAdvancedProposal(page, proposals) {
   for (const proposal of proposals) {
     if (proposal.type === "Execute custom WASM messages") {
@@ -221,13 +226,18 @@ export async function processAdvancedProposal(page, proposals) {
   }
 }
 
+/**
+ * Updates the DAO's information fields such as name, description, and social media links.
+ * This function interacts with form fields by matching them to the provided details keys.
+ * @param {import('playwright').Page} page - The Playwright page object.
+ * @param {Object} details - An object containing the DAO information fields to be updated.
+ */
 async function updateDaoInformation(page, details) {
-  // Navigate to the Governance section and initiate the update process
   await page.getByRole("button", { name: "Governance", exact: true }).click();
   await page
     .getByRole("button", { name: "Update DAO information Update" })
     .click();
-  // Define a mapping of details object keys to input selectors on the page
+
   const fieldSelectors = {
     daoName: 'input[name="name"]',
     daoDescription: 'textarea[name="description"]',
@@ -246,6 +256,12 @@ async function updateDaoInformation(page, details) {
   }
 }
 
+/**
+ * Executes custom WASM messages in a decentralized application or protocol.
+ * It involves selecting a blockchain, entering a message, and executing it.
+ * @param {import('playwright').Page} page - The Playwright page object.
+ * @param {Object} details - An object with properties `chain` and `message` for execution.
+ */
 async function executeCustomWASMMessages(page, details) {
   await page.getByRole("button", { name: "Advanced", exact: true }).click();
   await page
@@ -254,16 +270,73 @@ async function executeCustomWASMMessages(page, details) {
 
   // Expand the dropdown for chain selection
   await page.click('[title="Expand"]');
-
-  // Confirm the selection if necessary - this might be optional based on how your UI works
   await page
     .getByRole("option", { name: `${details.chain} ${details.chain}` })
     .locator("div")
     .first()
     .click();
-
-  // Enter the message in the appropriate input field
   await page.getByLabel("Message1Enter your message").fill(details.message);
 }
 
+/**
+ * Updates the list of whitelisted assets for a platform or service.
+ * It searches for an asset, verifies its presence, and selects it for updating the whitelist.
+ * @param {import('playwright').Page} page - The Playwright page object.
+ * @param {Object} details - An object containing the `asset` name to be whitelisted.
+ */
+async function updateWhiteListedAssets(page, details) {
+  await page.getByRole("button", { name: "Tokens", exact: true }).click();
+  await page.getByRole("button", { name: "Update whitelisted assets" }).click();
+  await page.getByPlaceholder("Search for an asset").fill(details.asset);
+  expect(page.getByText(details.asset)).toBeVisible();
+  await page.getByText(details.asset).click();
+}
 
+/**
+ * Creates a cross-chain treasury by selecting multiple chains.
+ * This function navigates to the treasury creation interface and processes each specified chain.
+ * @param {import('playwright').Page} page - The Playwright page object.
+ * @param {Object} details - An object containing an array of `chains` involved in the treasury.
+ */
+async function createCrossChainTreasury(page, details) {
+  await page.getByRole("button", { name: "Treasuries", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Create cross-chain treasury" })
+    .click();
+
+  details.chains.forEach(async (chain) => {
+    expect(page.getByText(chain)).toBeVisible();
+    await page.getByText(chain).click();
+  });
+}
+
+/**
+ * Updates the minimum weight required for rewards distribution in a DAO or decentralized protocol.
+ * This function modifies the minimum weight setting through an input form.
+ * @param {import('playwright').Page} page - The Playwright page object.
+ * @param {Object} details - An object containing the `reward` weight value to be set.
+ */
+async function updateMinimumWeightForRewards(page, details) {
+  await page.getByRole("button", { name: "Governance", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Update minimum weight for rewards" })
+    .click();
+
+  await page.getByPlaceholder("Enter minimum weight").fill(details.reward);
+}
+
+/**
+ * Fills in the name and description fields for a new proposal in a DAO.
+ * This function provides fields to enter a title and description for a proposal.
+ * @param {import('playwright').Page} page - The Playwright page object.
+ * @param {string} name - The title of the proposal.
+ * @param {string} description - The detailed description of the proposal.
+ */
+export async function enterNameAndDescriptionForProposal(
+  page,
+  name,
+  description
+) {
+  await page.getByPlaceholder("Enter proposal title").fill(name);
+  await page.getByPlaceholder("Enter proposal description").fill(description);
+}

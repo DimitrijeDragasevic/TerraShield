@@ -11,13 +11,15 @@ import {
   verifySpecificVotes,
   processGovernanceProposal,
   processAdvancedProposal,
+  processTokenProposal,
+  processTreasuriesProposal,
+  enterNameAndDescriptionForProposal,
 } from "../../enterprise/proposals";
 import { connectWallet } from "../../helpers/connectWalletProcedure";
 const { test, expect } = require("../../playwright.config");
 dotenv.config();
 
-let daoPage =
-  "https://staging.enterprise-protocol-next.pages.dev/dao?address=terra1ysfrtz4xgcz709ytrlregfq7wu25dsgd0gxkzqxcnwsv26h00c6sf33wy7";
+let daoPage;
 
 test.beforeEach(async ({ entryPage, homePage, page }) => {
   await entryPage.fillPhraseForm("Test wallet 1", "Testtest123!");
@@ -130,12 +132,6 @@ test("Creating and Rejecting a Proposal", async ({
 });
 
 test("Creating a nested proposal", async ({ page, homePage }) => {
-  // update dao configuration
-  // custom wasm message
-  // send luna
-  // update dao information
-  // create cross chain treasury
-
   test.slow();
 
   await connectWallet(page, homePage);
@@ -148,6 +144,12 @@ test("Creating a nested proposal", async ({ page, homePage }) => {
       type: "Update DAO information",
       details: { daoDescription: "Test dao update" },
     },
+    {
+      type: "Update minimum weight for rewards",
+      details: {
+        reward: "2",
+      },
+    },
   ];
   const advancedProposals = [
     {
@@ -159,7 +161,51 @@ test("Creating a nested proposal", async ({ page, homePage }) => {
       },
     },
   ];
+
+  const tokenProposal = [
+    {
+      type: "Update whitelisted assets",
+      details: {
+        asset: "Akash",
+      },
+    },
+  ];
+
+  const treasurieProposal = [
+    {
+      type: "Create cross-chain treasury",
+      details: {
+        chains: ["Neutron", "Injective"],
+      },
+    },
+  ];
+  await enterNameAndDescriptionForProposal(
+    page,
+    "Test 5",
+    "Make five proposals"
+  );
   await processGovernanceProposal(page, governanceProposals);
   await processAdvancedProposal(page, advancedProposals);
-  await page.pause();
+  await processTokenProposal(page, tokenProposal);
+  await processTreasuriesProposal(page, treasurieProposal);
+
+  await page.getByRole("button", { name: "Next" }).click();
+  await homePage.approveTransaction();
+
+  await page.bringToFront();
+  await expect(page.getByRole("heading", { name: "Test 5" })).toBeVisible({
+    timeout: 100000,
+  });
+
+  await vote(page, "Yes");
+  await homePage.approveTransaction();
+  await page.bringToFront();
+  expect(page.getByText("🎉 The proposal has passed")).toBeVisible({
+    timeout: 100000,
+  });
+  await page.getByRole("button", { name: "Execute" }).click();
+  await homePage.approveTransaction();
+  await page.bringToFront();
+  expect(page.getByText("tx completed")).toBeVisible({ timeout: 100000 });
+  expect(page.getByText("executed")).toBeVisible({ timeout: 10000 });
 });
